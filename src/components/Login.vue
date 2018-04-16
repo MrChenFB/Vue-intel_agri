@@ -1,27 +1,43 @@
 <template>
 	<div id="Login">
     <div id="main">
-      <!--<a href="#"><p class="up_a" >账号登陆</p></a>-->
-      <router-link to="/">账号登陆</router-link>
+      <router-link to="/" class="up_a">账号登陆</router-link>
       <router-link to="/message">短信登陆</router-link>
-     <!--<a > <p>短信登陆</p></a>-->
-      <input id="tel" type="text" placeholder="   请输入用户名/手机号" />
-      <input id="passwd" type="password" placeholder="   请输入密码"/><br>
-      <!--<a><p style="color:grey" >账号注册</p></a>-->
-      <!--<a > <p style="color:grey;">忘记密码</p></a>-->
-      <router-link to="/reg">账号注册</router-link>
+
+      <input id="tel" type="text" placeholder="   请输入用户名/手机号" v-model="userName" required/>
+      <input id="passwd" type="password" placeholder="   请输入密码" v-model = "passWord" pattern="[a-zA-Z0-9]{0-6}" required/><br>
+
+      <router-link to="/rig">账号注册</router-link>
       <router-link to="/forgetPassword">忘记密码</router-link>
-      <button id="submit">登&nbsp;&nbsp;陆</button>
+
+      <input type="submit" value="登   陆"  v-on:click="login"/>
     </div>
 	</div>
 </template>
 
 <script>
+  import axios from 'axios'
 export default {
   name: 'login',
   data () {
     return {
+        userName:"",
+        passWord:""
     }
+  },
+  methods: {
+      login:function () {
+        axios.post("/login",{
+          "username":this.userName,
+          "password":this.passWord
+        })
+          .then((response) => {
+            alert("连接成功")
+          })
+          .catch(function (err) {
+            console.log(err);
+          })
+      }
   },
   components:{
 
@@ -35,7 +51,7 @@ export default {
 	margin: 0;
 	width: 100%;
 	height: 700px;
-  background-color: #4acf50;
+  background-color: #4ACF78;
   display:flex;
   align-items:center;
 }
@@ -72,19 +88,4 @@ a:visited {color: #253bd3;}/* 已被访问的链接 */
 a:hover {  color: #4acf50;}/* 鼠标指针移动到链接上 */
 
 a:active {color: #4acf50;}/* 正在被点击的链接 */
-#submit{
-
-  background-color: rgba(37, 59, 211, 0.85); /* Green */
-  border: none;
-  color: white;
-  padding: 15px 180px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin-left: 80px;
-}
-a{
-  margin-left: 300px;
-}
 </style>
