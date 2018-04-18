@@ -41,7 +41,7 @@
                 return ;
               }
 
-          this.$http.post("http://10.158.56.220:8001/register/",{
+          this.$http.post("http://172.19.73.110:8001/user/",{
             "username":this.userName,
             "password":this.passWord,
             "code":this.code

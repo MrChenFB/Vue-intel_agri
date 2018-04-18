@@ -135,11 +135,11 @@
   #app{width:100%;}
   header{height: 100px;min-width: 1150px}
   .left_nav{float:right;margin-right: 30px}
-  .left_nav li{display: inline-block;text-align: center;height: 90px;line-height: 90px;font-size: 20px;font-family: verdana;transition: all .3s ease-in-out;cursor: pointer;margin-right: 20px;}
+  .left_nav li{display: inline-block;text-align: center;height: 70px;line-height: 70px;font-size: 20px;font-family: verdana;transition: all .3s ease-in-out;cursor: pointer;margin-right: 20px;}
   .left_nav li:hover{background: #00BC9B}
-  .nav_a{display: inline-block;height: 90px;padding: 0 15px;}
+  .nav_a{display: inline-block;height: 70px;padding: 0 15px;}
   .nav{width: 100%;overflow: hidden;}
-  header h1{width: 200px;height: 90px;text-align: center;line-height: 90px;font-size: 32px;font-family: verdana;cursor: pointer;transition: all .5s ease;margin: 0 auto}
+  header h1{width: 200px;height: 70px;text-align: center;line-height: 70px;font-size: 32px;font-family: verdana;cursor: pointer;transition: all .5s ease;margin: 0 auto}
   header h1:hover{font-size: 48px}
   footer{height: 72px;background: #3d444c;width: 100%;min-width: 1150px;padding-top: 8px;position: relative;color:#a9b8ca;}
   .bg{background: #00BC9B;}

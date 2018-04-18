@@ -13,6 +13,7 @@ import Home from './components/Home.vue'
 import MyInfo from './components/MyInfo.vue'
 import OnlineClass from './components/OnlineClass.vue'
 import TaskGround from './components/TaskGround.vue'
+import VideoPlayer from './components/VideoPlayer.vue'
 
 Vue.prototype.$http = axios
 
@@ -23,14 +24,23 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
 	routes:[
-	  {path:'/',component:Login},
+	  {path:'/',component:Home},
     {path:'/rig',component:Rigest},
     {path:'/login',component:Login},
     {path:'/forgetPassword',component:ForgetPassword},
     {path:'/home',component:Home},
     {path:'/task_ground',component:TaskGround},
-    {path:'online_class',component:OnlineClass},
-    {path:'my_info',component:MyInfo}
+    {path:'/online_class',component:OnlineClass},
+    {path:'/my_info',component:MyInfo},
+    {path:'/video_player',
+      component:VideoPlayer,
+      // children:[
+      //   {path:'',component:Home},
+      //   {path:':id',component:video_list}
+      // ]
+
+    }
+
 	],
 	mode:'history'
 })

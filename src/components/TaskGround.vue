@@ -1,8 +1,10 @@
 <template>
-    <div id="task_ground">
+    <div class="task_ground">
       <div class="kinds">
         <span >分类</span>
-        
+        <div v-for="classification in classifications" class="classfy">
+          <span>{{classification}}</span>
+        </div>
       </div>
       <div class="newest"></div>
       <div class="hotest"></div>

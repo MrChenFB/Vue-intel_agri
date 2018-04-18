@@ -29,13 +29,19 @@ const mutations={
   CHANGE_HW(state,obj){
     state.clientwidth = obj.w;
     state.clientheight = obj.h;
+  },
+  CHANGE_SHOW(state,type){
+    state.show=type
   }
 }
 
 const actions={
   change_hw({commit},obj){
     commit('CHANGE_HW',obj)
-  }
+  },
+  changeShow({commit},type){
+  commit('CHANGE_SHOW',type)
+}
 
 }
 

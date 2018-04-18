@@ -1,6 +1,6 @@
- <template>
+<template>
     <div>
-        my-info
+
     </div>
 </template>
 

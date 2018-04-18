@@ -5,7 +5,12 @@
 </template>
 
 <script>
-
+import {mapGetter} from 'vuex'
+  export default{
+    created(){
+        this.$store.dispatch('changeShow','home')
+    }
+  }
 </script>
 
 <style scoped>
