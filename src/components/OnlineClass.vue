@@ -2,8 +2,8 @@
   <div class="online_class">
     <div class="kinds">
       <span class="char_kinds" >分类</span>
-      <div v-for="classification in classifications" class="classfy">
-        <span>{{classification}}</span>
+      <div v-for="classification in classifications" class="classfy" @click="Slift(classification.path)">
+        <span>{{classification.name}}</span>
       </div>
       <br />
      <div id="button_div">
@@ -15,11 +15,43 @@
     </div>
     <div class="course">
       <div class="left">
-        <div class="newest">
-          <div >
-            <span class="most">最 新</span>
+        <div v-if="a==true">
+          <div class="newest">
+            <div >
+              <span class="most">最 新</span>
+            </div>
+            <router-link to="/online_class" v-for="(news,index) in video_new.results" v-if="index <=3">
+              <div class="courses">
+                <img  class="cou_pic" :src='news.video_img' /><br>
+                <span class="title">{{news.video_name}}</span><br>
+                <span class="discription">{{news.desc}}</span><br/>
+                <span class="read_num">阅读量：{{news.click_num}}</span>
+                <img  class="heart" src="../../static/images/心2.png"/>
+
+              </div>
+            </router-link>
+            <div class="more">更多>></div>
+
           </div>
-          <router-link to="/online_class" v-for="news in video_new.results">
+          <div class="hotest">
+            <div>
+              <span class="most">最 热</span>
+            </div>
+            <router-link to="/online_class" v-for="(hot,index) in video_new.results" v-if="index <=3">
+              <div class="courses">
+                <img  class="cou_pic" :src='hot.video_img' /><br>
+                <span class="title">{{hot.video_name}}</span><br>
+                <span class="discription">{{hot.desc}}</span><br/>
+                <span class="read_num">阅读量：{{hot.click_num}}</span>
+                <img  class="heart" src="../../static/images/心2.png"/>
+
+              </div>
+            </router-link>
+            <div class="more">更多>></div>
+          </div>
+        </div>
+        <div v-if="a==false" class="newest">
+          <router-link to="/online_class" v-for="(news,index) in video_slift.results" >
             <div class="courses">
               <img  class="cou_pic" :src='news.video_img' /><br>
               <span class="title">{{news.video_name}}</span><br>
@@ -29,86 +61,10 @@
 
             </div>
           </router-link>
-          <div class="courses">
-            <img  class="cou_pic" src="../../static/images/萝卜.jpg"/><br>
-            <span class="title">萝卜好吃的秘密</span><br>
-            <span class="discription">白萝卜、红萝卜、为女萝卜女卜、红萝卜、为女萝</span><br/>
-            <span class="read_num">阅读量：200</span>
-            <img  class="heart" src="../../static/images/心2.png"/>
-
-          </div>
-          <div class="courses">
-            <img  class="cou_pic" src="../../static/images/萝卜.jpg"/><br>
-            <span class="title">萝卜好吃的秘密</span><br>
-            <span class="discription">白萝卜、红萝卜、为女萝卜女卜、红萝卜、为女萝</span><br/>
-            <span class="read_num">阅读量：200</span>
-            <img  class="heart" src="../../static/images/心2.png"/>
-
-          </div>
-          <div class="courses">
-            <img  class="cou_pic" src="../../static/images/萝卜.jpg"/><br>
-            <span class="title">萝卜好吃的秘密</span><br>
-            <span class="discription">白萝卜、红萝卜、为女萝卜女卜、红萝卜、为女萝</span><br/>
-            <span class="read_num">阅读量：200</span>
-            <img  class="heart" src="../../static/images/心2.png"/>
-
-          </div>
-          <div class="courses">
-            <img  class="cou_pic" src="../../static/images/萝卜.jpg"/><br>
-            <span class="title">萝卜好吃的秘密</span><br>
-            <span class="discription">白萝卜、红萝卜、为女萝卜女卜、红萝卜、为女萝</span><br/>
-            <span class="read_num">阅读量：200</span>
-            <img  class="heart" src="../../static/images/心2.png"/>
-
-          </div>
-          <div class="more">更多>></div>
-
-         </div>
-        <div class="hotest">
-          <div>
-            <span class="most">最 热</span>
-          </div>
-
-          <div class="courses">
-            <img  class="cou_pic" src="../../static/images/萝卜.jpg"/><br>
-            <span class="title">萝卜好吃的秘密</span><br>
-            <span class="discription">白萝卜、红萝卜、为女萝卜女卜、红萝卜、为女萝</span><br/>
-            <span class="read_num">阅读量：200</span>
-            <img  class="heart" src="../../static/images/心2.png"/>
-
-          </div>
-          <div class="courses">
-            <img  class="cou_pic" src="../../static/images/萝卜.jpg"/><br>
-            <span class="title">萝卜好吃的秘密</span><br>
-            <span class="discription">白萝卜、红萝卜、为女萝卜女卜、红萝卜、为女萝</span><br/>
-            <span class="read_num">阅读量：200</span>
-            <img  class="heart" src="../../static/images/心2.png"/>
-
-          </div>
-          <div class="courses">
-            <img  class="cou_pic" src="../../static/images/萝卜.jpg"/><br>
-            <span class="title">萝卜好吃的秘密</span><br>
-            <span class="discription">白萝卜、红萝卜、为女萝卜女卜、红萝卜、为女萝</span><br/>
-            <span class="read_num">阅读量：200</span>
-            <img  class="heart" src="../../static/images/心2.png"/>
-
-          </div>
-          <div class="courses">
-            <img  class="cou_pic" src="../../static/images/萝卜.jpg"/><br>
-            <span class="title">萝卜好吃的秘密</span><br>
-            <span class="discription">白萝卜、红萝卜、为女萝卜女卜、红萝卜、为女萝</span><br/>
-            <span class="read_num">阅读量：200</span>
-            <img  class="heart" src="../../static/images/心2.png"/>
-
-          </div>
-          <div class="more">更多>></div>
         </div>
-
       </div>
       <div class="right"></div>
     </div>
-
-
 
   </div>
 </template>
@@ -120,7 +76,8 @@
       return{
         video_new:{},
         video_hot:{},
-        a:'1'
+        a:true,
+        video_slift:{}
       }
     },
     computed:{
@@ -129,15 +86,31 @@
       })
     },
     methods:{
-
+      Slift(type) {
+        this.$http.get('http://172.19.73.71:8001/video/?video_kind='+type)
+          .then((response)=>{
+            this.a = false
+            console.log(response.data)
+            this.video_slift = response.data
+            console.log(this.a)
+          })
+          .catch(function (err) {
+            console.log(err)
+          })
+      }
     },
     created(){
       this.$store.dispatch('changeShow','online_class')
-      this.$http.get('http://10.158.57.242:8001/video/')
+      this.$http.get('http://172.19.73.71:8001/video/?ordering=add_time')
         .then((response)=>{
           this.video_new = response.data
-
-
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
+      this.$http.get('http://172.19.73.71:8001/video/?ordering=click_num')
+        .then((res)=>{
+          this.video_hot = res.data
         })
         .catch(function (err) {
           console.log(err)
@@ -166,8 +139,9 @@
   .most{font-size: 35px;}
   #button_div{width: 400px;height: 50px;margin-top: 30px;}
   .sort_button{border-radius: 7px;width: 60px;height: 40px;margin-left: 20px;border: none;background-color: lightgreen;cursor: pointer;font-size: 20px;margin-top: 10px;}
-  .courses{width: 23%;height: auto;float: left;margin-left: 20px;margin-top: 50px;}
-  .cou_pic{border-radius: 10px;width: 95%;height: 150px;}
+  .courses{width: 19%;height: auto;float: left;margin-left: 50px;margin-top: 50px;background-color: #eeeeee;border-radius: 10px;padding-bottom: 3px;
+  }
+  .cou_pic{border-radius: 10px;width: 100%;height: 150px;}
   .title{float:left;margin-left: 20px;font-size: 20px;font-weight: 800}
   .discription{
     text-align: left;
@@ -183,5 +157,6 @@
   }
   .heart{width: 20px;height: 20px;float: right;margin-right: 5px;margin-top: 0;}
   .read_num{float: right;color: grey;margin-right: 30px;}
-  .more{width: 100px;height: 50px;font-size: 20px;color: #b2b2b2;float: right;margin-top: 30px;cursor: pointer;}
+  .more{width: 100%;height: 50px;font-size: 20px;color: #b2b2b2;float: right;margin-top: 30px;cursor: pointer;}
+  .contain_div{margin-left: 80px;}
 </style>

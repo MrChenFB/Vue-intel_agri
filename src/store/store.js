@@ -15,13 +15,13 @@ const state={
   show:'home',
   clientheight:0,
   clientwidth:0,
-  classifications:{
-    plant:'种植业',
-    aquatic:'水产养殖业',
-    agriculture:'农资业',
-    agri_sidelin:'农副加工',
-    pasturage:'畜牧业'
-  }
+  classifications:[
+    {name:"种植业",path:'plant'},
+    {name:"水产养殖业",path:'aquaculture'},
+    {name:"农资业",path:'agri_industry'},
+    {name:"农副加工业",path:'agri_and_sideline_industries'},
+    {name:'畜牧业',path:'animal'}
+  ]
 
 }
 
