@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state={
+  token: null,
   left_nav:[
     {name:'首页',path:'home'},
     {name:'任务广场',path:'task_ground'},

@@ -49,7 +49,7 @@ Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 
 
-axios.defaults.baseURL = 'http://210.28.188.99:8088';
+
 //axios.defaults.headers.common['Authorization'] = 'Bearer ' + store.state.token;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
