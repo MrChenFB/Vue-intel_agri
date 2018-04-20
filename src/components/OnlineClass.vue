@@ -20,7 +20,7 @@
             <div >
               <span class="most">最 新</span>
             </div>
-            <router-link to="/online_class" v-for="(news,index) in video_new.results" v-if="index <=3">
+            <router-link to="/online_class" v-for="(news,index) in video_new.results" v-if="index <=3" :key="index">
               <div class="courses">
                 <img  class="cou_pic" :src='news.video_img' /><br>
                 <span class="title">{{news.video_name}}</span><br>
@@ -37,7 +37,7 @@
             <div>
               <span class="most">最 热</span>
             </div>
-            <router-link to="/online_class" v-for="(hot,index) in video_new.results" v-if="index <=3">
+            <router-link to="/online_class" v-for="(hot,index) in video_new.results" v-if="index <=3" :key="index">
               <div class="courses">
                 <img  class="cou_pic" :src='hot.video_img' /><br>
                 <span class="title">{{hot.video_name}}</span><br>
@@ -51,7 +51,7 @@
           </div>
         </div>
         <div v-if="a==false" class="newest">
-          <router-link to="/online_class" v-for="(news,index) in video_slift.results" >
+          <router-link to="/online_class" v-for="(news,index) in video_slift.results" :key="index" >
             <div class="courses">
               <img  class="cou_pic" :src='news.video_img' /><br>
               <span class="title">{{news.video_name}}</span><br>
@@ -87,7 +87,7 @@
     },
     methods:{
       Slift(type) {
-        this.$http.get('http://172.19.73.71:8001/video/?video_kind='+type)
+        this.$http.get('video/?video_kind='+type)
           .then((response)=>{
             this.a = false
             console.log(response.data)
@@ -101,14 +101,14 @@
     },
     created(){
       this.$store.dispatch('changeShow','online_class')
-      this.$http.get('http://172.19.73.71:8001/video/?ordering=add_time')
+      this.$http.get('video/?ordering=add_time')
         .then((response)=>{
           this.video_new = response.data
         })
         .catch(function (err) {
           console.log(err)
         })
-      this.$http.get('http://172.19.73.71:8001/video/?ordering=click_num')
+      this.$http.get('video/?ordering=click_num')
         .then((res)=>{
           this.video_hot = res.data
         })
@@ -157,6 +157,6 @@
   }
   .heart{width: 20px;height: 20px;float: right;margin-right: 5px;margin-top: 0;}
   .read_num{float: right;color: grey;margin-right: 30px;}
-  .more{width: 100%;height: 50px;font-size: 20px;color: #b2b2b2;float: right;margin-top: 30px;cursor: pointer;}
+  .more{width: 100%;height: 50px;font-size: 20px;color: #b2b2b2;float: right;margin-top: 30px;cursor: pointer;margin-left: 700px;}
   .contain_div{margin-left: 80px;}
 </style>

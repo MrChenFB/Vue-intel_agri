@@ -32,6 +32,10 @@ export default {
           "password":this.passWord
         })
           .then((response) => {
+            this.$store.state.token = response.date.res.token
+            console.log(res.data)
+            sessionStorage('token',res.data.res.token)
+            this.$router,push('/home')
             alert("连接成功")
           })
           .catch(function (err) {
