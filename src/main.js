@@ -15,12 +15,10 @@ import OnlineClass from './components/OnlineClass.vue'
 import TaskGround from './components/TaskGround.vue'
 import VideoPlayer from './components/VideoPlayer.vue'
 
-Vue.prototype.$http = axios
-
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 // Vue.use(VueResource)
-axios.defaults.baseURL = "http://10.158.61.226:8001/";
+axios.defaults.baseURL = "http://118.24.116.137:8001/";
 
 const router = new VueRouter({
 	routes:[
@@ -56,9 +54,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.timeout = 6000;
 // 添加请求拦截器
 axios.interceptors.request.use(config => {
-  let token = store.state.token;
+  let token = sessionStorage.getItem('token');
   if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-    config.headers.Authorization = 'Bearer ' + token;
+    config.headers.Authorization = 'JWT ' + token;
+    // config.headers.Authorization = `JWT ${store.state.userInfo.token}`;
     //console.log('interceptors config=',config)
   }
   return config
@@ -67,25 +66,25 @@ axios.interceptors.request.use(config => {
 })
 
 // 添加响应拦截器
-axios.interceptors.response.use(
-  response => {
-    return response;
-  },
-  error => {
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          // 这里写清除token的代码
-          store.state.token = null;
-          sessionStorage.clear();
-          router.replace({
-            path: '/',
-            query: {redirect: router.currentRoute.fullPath}//登录成功后跳入浏览的当前页面
-          })
-      }
-    }
-    return Promise.reject(error.response.data)
-  });
+// axios.interceptors.response.use(
+//   response => {
+//     return response;
+//   },
+//   error => {
+//     if (error.response) {
+//       switch (error.response.status) {
+//         case 401:
+//           // 这里写清除token的代码
+//           store.state.token = null;
+//           sessionStorage.clear();
+//           router.replace({
+//             path: '/',
+//             query: {redirect: router.currentRoute.fullPath}//登录成功后跳入浏览的当前页面
+//           })
+//       }
+//     }
+//     return Promise.reject(error.response.data)
+//   });
 
 
 new Vue({

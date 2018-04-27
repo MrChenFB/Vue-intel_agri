@@ -10,14 +10,14 @@
       </div>
       <div class="pwd">
         <span>密码:</span>
-        <input id="passwd" type="password" placeholder="   请输入密码" v-model = "passWord" pattern="[a-zA-Z0-9]{0-6}" required/><br>
+        <input id="passwd" type="password" placeholder="   请输入密码" v-model = "passWord"  required/><br>
       </div>
       <div class="test">
         <router-link to="/rig">账号注册</router-link>
         <router-link to="/forgetPassword">忘记密码</router-link>
       </div>
      <div class="button">
-       <button type="button" v-on:click="login">登 陆</button>
+       <button type="button" v-on:click="login" class="submit_data">登 陆</button>
      </div>
 
 
@@ -26,8 +26,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import store from '../store/store'
+  import {mapGetters} from 'vuex'
 export default {
   name: 'login',
   data () {
@@ -38,7 +37,7 @@ export default {
   },
   methods: {
       login:function () {
-        this.$axios.post("/login/",{
+        this.$axios.post("login/",{
           "username":this.userName,
           "password":this.passWord
         })
@@ -47,18 +46,41 @@ export default {
             this.$store.state.token = response.data.token
             console.log(response.data.token)
             sessionStorage.setItem('token',response.data.token)
-            //debugger
+            console.log(sessionStorage.getItem('token'))
+            this.$store.dispatch('changeUserName',this.userName)
             this.$router.push('/online_class')
-            alert("连接成功")
+            window.location.reload();
+            //debugger
+
           })
           .catch(function (err) {
+              alert("┭┮﹏┭┮，发生未知的错误！")
             console.log(err);
           })
       }
-  },
-  components:{
 
-  }
+  },
+  computed:{
+    ...mapGetters({
+      status:'getStatus',
+      userInfo:'getUserInfo'
+    })
+  },
+  created(){
+    this.$store.dispatch('changeShow','login')
+  },
+//  destroyed(){
+//      debugger
+//    if(this.status == true){
+//        this.$axios.get('/user/'+this.userName+'/')
+//          .then((response)=>{
+//            this.$store.dispatch('changeUserInfo',response.data)
+//          })
+//          .catch(function (err) {
+//            console.log(err)
+//          })
+//    }
+//  }
 }
 </script>
 
@@ -67,10 +89,9 @@ export default {
 #Login{
 	margin: 0;
 	width: 100%;
-	height: 700px;
+	height: 740px;
   background-color: #4ACF78;
-  background-size: cover;
-  background-attachment: fixed;
+  min-height:100%;
   display:flex;
   align-items:center;
 }
@@ -107,13 +128,13 @@ export default {
   }
   .button button{
     border-radius:15px;border:1px solid #aeaeae;
-    width:200px;
-    height: 40px;
+    width:300px;
+    height: 50px;
     margin:20px;
     font-size: 22px;
   }
   .name input{
-    border-radius:15px;border:1px solid #aeaeae;
+    border-radius:10px;border:1px solid #aeaeae;
     width:250px;
     height: 50px;
     margin-left: 20px;
@@ -132,14 +153,11 @@ export default {
     display:inline-block;
 
   }
-  .up_a{
-    margin-top: 100px;
-    margin-bottom: 50px;
-  }
-
 a:visited {color: #253bd3;}/* 已被访问的链接 */
 
 a:hover {  color: #4acf50;}/* 鼠标指针移动到链接上 */
 
 a:active {color: #4acf50;}/* 正在被点击的链接 */
+  .submit_data{width: 270px;height: 50px;background-color: #5394ec;}
+  input{padding-left: 10px;}
 </style>

@@ -27,6 +27,9 @@ import {mapGetters} from 'vuex'
     },
     methods:{
 
+    },
+    created(){
+      this.$store.dispatch('changeShow','task_ground');
     }
   }
 </script>

@@ -8,9 +8,7 @@ const state={
   left_nav:[
     {name:'首页',path:'home'},
     {name:'任务广场',path:'task_ground'},
-    {name:'在线课堂',path:'online_class'},
-    {name:'我的',path:'my_info'},
-    {name:'登录',path:'login'}
+    {name:'在线课堂',path:'online_class'}
 
   ],
   show:'home',
@@ -22,8 +20,11 @@ const state={
     {name:"农资业",path:'agri_industry'},
     {name:"农副加工业",path:'agri_and_sideline_industries'},
     {name:'畜牧业',path:'animal'}
-  ]
-
+  ],
+  userInfo:{},
+  status:false,
+  userName:'',
+  videoId:1
 }
 
 const mutations={
@@ -33,7 +34,17 @@ const mutations={
   },
   CHANGE_SHOW(state,type){
     state.show=type
+  },
+  CHANGE_USERNAME(state,userName){
+    state.userName = userName
+  },
+  CHANGR_USERINFO(state,userInfo){
+    state.userInfo = userInfo
+  },
+  CHANGE_VIDEOID(state,id){
+    state.videoId = id
   }
+
 }
 
 const actions={
@@ -42,7 +53,16 @@ const actions={
   },
   changeShow({commit},type){
   commit('CHANGE_SHOW',type)
-}
+},
+  changeUserName({commit},userName){
+    commit('CHANGE_USERNAME',userName)
+  },
+  changeUserInfo({commit},userInfo){
+    commit('CHANGR_USERINFO',userInfo)
+  },
+  changeVideoId({commit},id){
+    commit('CHANGE_VIDEOID',id)
+  }
 
 }
 
@@ -55,6 +75,12 @@ const getters={
   },
   getClassifications:function (state) {
     return state.classifications
+  },
+  getUserInfo:function (state) {
+    return state.userInfo
+  },
+  getVideoId(state){
+    return state.videoId
   }
 
 }
