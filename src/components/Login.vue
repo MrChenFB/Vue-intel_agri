@@ -42,9 +42,7 @@ export default {
           "password":this.passWord
         })
           .then((response) => {
-
             this.$store.state.token = response.data.token
-            console.log(response.data.token)
             sessionStorage.setItem('token',response.data.token)
             console.log(sessionStorage.getItem('token'))
             this.$store.dispatch('changeUserName',this.userName)
@@ -54,7 +52,7 @@ export default {
 
           })
           .catch(function (err) {
-              alert("┭┮﹏┭┮，发生未知的错误！")
+              alert("┭┮﹏┭┮，用户名或者密码输入错误！")
             console.log(err);
           })
       }
@@ -69,18 +67,6 @@ export default {
   created(){
     this.$store.dispatch('changeShow','login')
   },
-//  destroyed(){
-//      debugger
-//    if(this.status == true){
-//        this.$axios.get('/user/'+this.userName+'/')
-//          .then((response)=>{
-//            this.$store.dispatch('changeUserInfo',response.data)
-//          })
-//          .catch(function (err) {
-//            console.log(err)
-//          })
-//    }
-//  }
 }
 </script>
 
