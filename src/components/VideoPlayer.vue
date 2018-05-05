@@ -53,123 +53,52 @@
 
       <!--根评论-->
       <!--0-->
-      <div class="root_commend">
+      <div class="root_commend" v-for="(root_com,i) in a" :key="i" v-if="i<3" >
         <div class="commend_up">
-          <img class="root_commend_icon" src="../../static/images/头像1.jpg">
-          <div class="root_commend_name">可爱的 xiaojujushishei
-            <div class="root_commend_time">2015/5/8</div>
+          <img class="root_commend_icon" :src="root_com.user.user_profile.image">
+          <div class="root_commend_name">{{root_com.user.user_profile.nick_name}}
+            <div class="root_commend_time">{{root_com.add_time}}</div>
           </div>
 
         </div>
-        <div class="commend_content">煲耳机烧单反，为索尼爸爸打 Call 不嫌烦；
-          全色号口红，香奈儿新款，给 Pick 买水喝不完。
-          网红餐厅，健身私教，出国旅游，专车接驾... 看起来仿佛已经与纽约上东区接轨的「腔调」人生。
-          实际上呢，月末吃土。
+        <div class="commend_content">{{root_com.comment}}
         </div>
         <div class="commend_down">
-          <input type="text" class="reply_input" v-if="show_input.s0" v-model="input_value.s0">
-          <input type="button" class="reply_button" v-if="show_input.s0" value="评论" @click="Reply(11,22,0)"/>
-          <input type="button" class="reply_cancle"  v-if="show_input.s0" value="取消 " @click="Cancle(0)"/>
-          <span class="hide_reply"  @click="ShowInput(0)">回复</span>
+          <input type="text" class="reply_input" v-if="show_input[1][0].status" v-model="show_input[i][0].value">
+          <input type="button" class="reply_button" v-if="show_input[1][0].status" value="评论" @click="Reply(11,22,0,0)"/>
+          <input type="button" class="reply_cancle"  v-if="show_input[1][0].status" value="取消 " @click="Cancle(0,0)"/>
+          <span class="hide_reply"  @click="ShowInput(1,0)">回复</span>
           <img class="thumb_up" src="../../static/images/点赞.png"  >
-          e1200
-          <img class="thumb_up" src="../../static/images/回复.png" @click="ShowChildCommend(0)">
-          25
+          {{root_com.point_love_nums}}
+
+          <img class="thumb_up" src="../../static/images/回复.png" @click="ShowChildCommend(i)">
+          {{root_com.child_com.length}}
 
         </div>
-        <div class="child_commend" v-if="show[0].status">
-          <div class="child_commend_reply">
+        <div class="child_commend" v-if="show[i].status">
+          <div class="child_commend_reply" v-for="(child,j) in root_com.child_com" :key="j">
             <div class="commend_up">
-              <img class="root_commend_icon" src="../../static/images/头像4.jpg">
+              <img class="root_commend_icon" :src="child.from_uid.user_profile.image">
               <div class="root_commend_name">
-                <span >可爱的 xiaojujushishei</span>
+                <span >{{child.from_uid.user_profile.nick_name}}</span>
                 <span class="reply_charecter">&nbsp;&nbsp;回复&nbsp;&nbsp;</span>
-                <span>我是谁阿森纳测试</span>
+                <span>{{child.to_uid.user_profile.nick_name}}</span>
               </div>
 
             </div>
             <div class="commend_content">
-              血泪的教训，不要说价格！并且绝对不要骗他报一个超低价（比如20）告诉他！你会收到来自四面八方的代购的T.T
+              {{child.comment}}
             </div>
             <div class="commend_down">
+              <input type="text" class="reply_input"  v-if="show_input[i][j+1].status" v-model="show_input[i][j+1].value">
+              <input type="button" class="reply_button" v-if="show_input[i][j+1].status" value="评论" @click="Reply(11,22,i,j+1)"/>
+              <input type="button" class="reply_cancle"  v-if="show_input[i][j+1].status" value="取消 " @click="Cancle(i,j+1)"/>
+              <span class="hide_reply" @click="ShowInput(0,1)">回复</span>
               <img class="thumb_up" src="../../static/images/点赞.png">
-              2230
-              <span class="hide_reply" @click="ShowChildCommend(0)">回复</span>
-            </div>
-          </div>
-          <div class="child_commend_reply">
-            <div class="commend_up">
-              <img class="root_commend_icon" src="../../static/images/头像4.jpg">
-              <div class="root_commend_name">
-                <span >可爱的 xiaojujushishei</span>
-                <span class="reply_charecter">&nbsp;&nbsp;回复&nbsp;&nbsp;</span>
-                <span>我是谁阿森纳测试</span>
-              </div>
-
-            </div>
-            <div class="commend_content">
-              血泪的教训，不要说价格！并且绝对不要骗他报一个超低价（比如20）告诉他！你会收到来自四面八方的代购的T.T
-            </div>
-            <div class="commend_down">
-              <img class="thumb_up" src="../../static/images/点赞.png">
-              2230
-              <span class="hide_reply" @click="ShowChildCommend(0)">回复</span>
-            </div>
-          </div>
-          <div class="child_commend_reply">
-            <div class="commend_up">
-              <img class="root_commend_icon" src="../../static/images/头像4.jpg">
-              <div class="root_commend_name">
-                <span >可爱的 xiaojujushishei</span>
-                <span class="reply_charecter">&nbsp;&nbsp;回复&nbsp;&nbsp;</span>
-                <span>我是谁阿森纳测试</span>
-              </div>
-
-            </div>
-            <div class="commend_content">
-              血泪的教训，不要说价格！并且绝对不要骗他报一个超低价（比如20）告诉他！你会收到来自四面八方的代购的T.T
-            </div>
-            <div class="commend_down">
-              <img class="thumb_up" src="../../static/images/点赞.png">
-              2230
-              <span class="hide_reply" @click="ShowChildCommend(0)">回复</span>
+              {{child.point_love_nums}}
             </div>
           </div>
         </div>
-
-      </div>
-
-
-      <!--1-->
-      <div class="root_commend">
-        <div class="commend_up">
-          <img class="root_commend_icon" src="../../static/images/头像2.jpg">
-          <div class="root_commend_name">可爱的 xiaojujushishei
-            <div class="root_commend_time">2015/5/8</div>
-          </div>
-
-        </div>
-        <div class="commend_content">煲耳机烧单反，为索尼爸爸打 Call 不嫌烦；
-          全色号口红，香奈儿新款，给 Pick 买水喝不完。
-          网红餐厅，健身私教，出国旅游，专车接驾... 看起来仿佛已经与纽约上东区接轨的「腔调」人生。
-          实际上呢，月末吃土。
-        </div>
-        <div class="root_down">
-          <img class="thumb_up" src="../../static/images/点赞.png">
-          e1200
-          <img class="thumb_up" src="../../static/images/回复.png">
-          25
-          <span class="hide_reply" @click="ShowChildCommend(1)">收起回复</span>
-        </div>
-        <div class="child_commend" v-if="show[1].status">
-
-        </div>
-      </div>
-      <!--2-->
-      <div class="root_commend" @click="ShowChildCommend(2)">
-
-      </div>
-      <div class="child_commend" v-if="show[2].status">
 
       </div>
     </div>
@@ -208,25 +137,35 @@
           poster: "",
         },
         show:[
-          {status:false,},
-          {status:false},
-          {status:false},
-          {status:false},
+//          {status:false,},
+//          {status:false},
+//          {status:false},
+//          {status:false},
         ],
-        show_input: {
-//          "s0": false,
-//          "s01": false,
-//          "s02": false,
-//          "s1": false
-        },
-        input_value:{
-            "s0":'',
-          "s01":'',
-          "s02":''
-        },
+        show_input: [
+            [
+                {status:false,value:''},
+                {status:false,value:''},
+                {status:false,value:''},
+                {status:false,value:''}
+            ],
+          [
+            {status:false,value:''},
+            {status:false,value:''},
+            {status:false,value:''},
+            {status:false,value:''}
+          ]
+
+        ],
+//        input_value:{
+//            "s0":'',
+//          "s01":'',
+//          "s02":''
+//        },
         a:{},
         videoRecommend:{},
         createRootCommend:'',
+        is_i:''
       }
     },
     mounted:function () {
@@ -257,20 +196,25 @@
         .then((response)=>{
           console.log(response);
          this.a = response.data;
-          var ss = this.a.length
-         while(ss >0){
-           ss = ss-1
-             console.log('eriasbdndrmbf'+ss)
-             this.show.push({status:true})
-           var pos = 's'+ss.toString()
-             this.show_input[pos] = true;
-           var jslength=0;
 
-           for(var js2 in a.child_com){
+         if(this.a.length >0){
 
-             jslength++;
-           }
+             for(let i=0;i<this.a.length;i++){
+               this.show.push({status:false})
+//               this.show_input[i] = new Array();
+//               for(var j=0;j<=this.a[i].child_com.length;j++){
+//                 this.show_input[i][j]={status:false,value:''}
+//               }
+             }
          }
+         console.log(this.show_input)
+//         while(ss >0){
+//           ss = ss-1
+//             console.log('eriasbdndrmbf'+ss)
+//             this.show.push({status:true})
+//             this.show_input[pos] = true;
+////           var jslength=0;
+//         }
 //         console.log('dddddddddddddddddddddd'+this.show[this.show.length-1].status)
 //          console.log(this.show_input.s0)
         })
@@ -306,11 +250,9 @@
       ShowChildCommend(num){
         if( this.show[num].status === false) {
           this.show[num].status = true
-          this.show[0].childstatus[0].input = true
         }
         else {
           this.show[num].status = false
-          this.show[0].childstatus[0].input = false
         }
       },
       RecommendVideo(type){
@@ -352,27 +294,29 @@
               })
           }
       },
-      ShowInput(index){
-        var pos = 's'+ index.toString()
-        console.log(this.show_input[pos]);
-          if(this.show_input[pos] === false){
-            this.show_input[pos] = true
-          }
-          else {
-            this.show_input[pos] = false
-          }
-      },
-      Reply(aa,bb,content){
-          console.log(this.a)
-          var con = 's'+ content.toString()
-          console.log(this.input_value[con])
-      },
-      Cancle(index){
-          var pos = 's'+index.toString()
-          this.show_input[pos] = false;
-          this.input_value[pos] = ''
-      }
+      ShowInput(i,j){
+//          if( this.show[i].status === false) {
+//            this.show[i].status = true
+//          }
+//          else {
+//            this.show[i].status = false
+//          }
 
+          if(this.show_input[i][j].status === true){
+            this.show_input[i][j].status = false
+          }
+         else{
+            this.show_input[i][j].status = true
+          }
+      },
+      Reply(aa,bb,i,j){
+          console.log(this.show_input[i][j].value)
+      },
+      Cancle(i,j){
+//          var pos = 's'+index.toString()
+          this.show_input[i][j].sta = true;
+          this.show_input[i][j].value = ''
+      }
     }
   }
 </script>
@@ -408,7 +352,7 @@
   .root_commend{width: 1000px;height: auto;display: inline-block;margin-left: 100px;border-bottom: 1px solid  #d1d1d1;margin-top: 20px;}
   .child_commend{
     width: 950px;
-    height: 500px;
+    height:auto;
     margin-left: 10px;
     margin-bottom: 10px;
     background-color: #f7f8fa;
@@ -417,7 +361,7 @@
   .commend_up{width: 100%;height: 40px;line-height: 40px;}
   .root_commend_icon{width: 40px;height: 40px;border-radius: 20px;display: inline-block;float: left;line-height: 40px;margin-left:10px; }
   .root_commend_name{ height: 40px;  margin-left: 60px; vertical-align: middle;  display: table-cell;width: 970px;font-size: 20px;padding-left: 10px; }
-  .root_commend_time{height: 40px; vertical-align: middle;  display: table-cell;float: right; width:150px;text-align: center;color: grey;}
+  .root_commend_time{height: 40px; vertical-align: middle;  display: table-cell;float: right; width:300px;text-align: center;color: grey;}
   .commend_content{width: 95%;margin-left: 20px;height: auto;margin-top: 10px;line-height: 30px;font-size: 19px;}
   .commend_down{width: auto;height: 35px;vertical-align: middle;  display: table-cell;float: right;color: grey; margin-right: 40px;margin-top: 10px;}
   .thumb_up{width: 23px;height: 23px;vertical-align: middle; margin-left: 15px;margin-right: 5px;}

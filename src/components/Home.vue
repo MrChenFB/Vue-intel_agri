@@ -14,6 +14,6 @@ import {mapGetter} from 'vuex'
 </script>
 
 <style scoped>
-  .home{width: 100%;height: 1000px;background-color: grey;margin: 0;}
+  .home{width: 100%;height: 1000px;background-color: white;margin: 0;}
 
 </style>
