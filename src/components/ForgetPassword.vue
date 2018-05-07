@@ -98,9 +98,9 @@
           实际上呢，月末吃土。
         </div>
         <div class="commend_down">
-          <img class="thumb_up" src="../../static/images/点赞.png">
+          <img class="thumb_up" src="../../static/images/good_none.png">
           e1200
-          <img class="thumb_up" src="../../static/images/回复.png">
+          <img class="thumb_up" src="../../static/images/msg_none.png">
           25
           <span class="hide_reply" @click="ShowChildCommend(0)">回复</span>
         </div>
@@ -184,7 +184,7 @@
         <div class="root_down">
           <img class="thumb_up" src="../../static/images/点赞.png">
           e1200
-          <img class="thumb_up" src="../../static/images/回复.png">
+          <img class="thumb_up" src="../../static/images/msg_none.png">
           25
           <span class="hide_reply" @click="ShowChildCommend(1)">收起回复</span>
         </div>
