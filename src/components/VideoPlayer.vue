@@ -1,46 +1,46 @@
 <template>
   <div class="con">
-    <!--&lt;!&ndash;视频播放&ndash;&gt;-->
-    <!--<div class="video">-->
-      <!--&lt;!&ndash;视频播放的主体&ndash;&gt;-->
-      <!--<div class="left">-->
-        <!--<video-player  class="video-player-box"-->
-                       <!--ref="videoPlayer"-->
-                       <!--:options="playerOptions"-->
-                       <!--:playsinline="true"-->
-                       <!--customEventName="customstatechangedeventname"-->
+    <!--视频播放-->
+    <div class="video">
+      <!--视频播放的主体-->
+      <div class="left">
+        <video-player  class="video-player-box"
+                       ref="videoPlayer"
+                       :options="playerOptions"
+                       :playsinline="true"
+                       customEventName="customstatechangedeventname"
 
-                       <!--@play="onPlayerPlay($event)"-->
-                       <!--@pause="onPlayerPause($event)"-->
-                       <!--@ended="onPlayerEnded($event)"-->
-                       <!--@waiting="onPlayerWaiting($event)"-->
-                       <!--@statechanged="playerStateChanged($event)"-->
-                       <!--@ready="playerReadied">-->
-        <!--</video-player>-->
-        <!--<div class="title" v-model="videoInfo">-->
-          <!--<span class="name" >{{videoInfo.video_name}} :</span>-->
-          <!--<span class="desc">{{videoInfo.desc}}</span><br/>-->
-          <!--<span class="click_num"><img src="../../static/images/video_click_num.jpg">  {{videoInfo.click_num}}</span>-->
-          <!--<span class=type></span>-->
-        <!--</div>-->
+                       @play="onPlayerPlay($event)"
+                       @pause="onPlayerPause($event)"
+                       @ended="onPlayerEnded($event)"
+                       @waiting="onPlayerWaiting($event)"
+                       @statechanged="playerStateChanged($event)"
+                       @ready="playerReadied">
+        </video-player>
+        <div class="title" v-model="videoInfo">
+          <span class="name" >{{videoInfo.video_name}} :</span>
+          <span class="desc">{{videoInfo.desc}}</span><br/>
+          <span class="click_num"><img src="../../static/images/video_click_num.jpg">  {{videoInfo.click_num}}</span>
+          <span class=type></span>
+        </div>
 
-      <!--</div>-->
-      <!--&lt;!&ndash;推荐视频列表&ndash;&gt;-->
-      <!--<div class="right">-->
-        <!--<div class="recommend" v-for="(videoRecommendItem, index) in videoRecommend" v-if="index <6" @click="RecommendVideo(videoRecommendItem.id)">-->
-          <!--<div class="rec_img"><img :src='"http://118.24.116.137:8001"+videoRecommendItem.video_img'></div>-->
-          <!--<div class="content">-->
-            <!--<div class="content_title">{{videoRecommendItem.video_name}}:{{videoRecommendItem.desc}}</div>-->
-            <!--<div class="con_click_num">-->
-              <!--<img class="rec_click_img" src="../../static/images/video_click_num.jpg">-->
-              <!--<span class="rec_click_num">{{videoRecommendItem.click_num}}</span>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
+      </div>
+      <!--推荐视频列表-->
+      <div class="right">
+        <div class="recommend" v-for="(videoRecommendItem, index) in videoRecommend" v-if="index <6" @click="RecommendVideo(videoRecommendItem.id)">
+          <div class="rec_img"><img :src='"http://118.24.116.137:8001"+videoRecommendItem.video_img'></div>
+          <div class="content">
+            <div class="content_title">{{videoRecommendItem.video_name}}:{{videoRecommendItem.desc}}</div>
+            <div class="con_click_num">
+              <img class="rec_click_img" src="../../static/images/video_click_num.jpg">
+              <span class="rec_click_num">{{videoRecommendItem.click_num}}</span>
+            </div>
+          </div>
+        </div>
 
-      <!--</div>-->
+      </div>
 
-    <!--</div>-->
+    </div>
 
     <!--评论-->
     <div class="commend">
@@ -64,13 +64,14 @@
         </div>
         <div class="commend_down">
           <input type="text" class="reply_input" v-if="show_input[0][i].status" v-model="show_input[0][i].value">
-          <input type="button" class="reply_button" v-if="show_input[0][i].status" value="评论" @click="Reply(11,22,0,0)"/>
+          <input type="button" class="reply_button" v-if="show_input[0][i].status" value="评论" @click="Reply(root_com.id,root_com.id,root_com.user.id,1,0,i)"/>
           <input type="button" class="reply_cancle"  v-if="show_input[0][i].status" value="取消 " @click="Cancle(0,i)"/>
           <button class="hide_reply"  @click="ShowInput(0,i)">回复</button>
-          <img class="thumb_up point" src="../../static/images/good_none.png" @click="createPoint(i,1)" onmouseover="this.src='../../static/images/good_exist.png'" onmouseout="this.src='../../static/images/good_none.png'">
+          <img class="thumb_up " v-if="!root_com.is_love" src="../../static/images/good_none.png" @click="createPoint(root_com.id,1)" onmouseover="this.src='../../static/images/good_exist.png'" onmouseout="this.src='../../static/images/good_none.png'" >
+          <img class="thumb_up " v-if="root_com.is_love" src="../../static/images/good_exist.png" >
           {{root_com.point_love_nums}}
 
-          <img class="thumb_up msg" src="../../static/images/msg_none.png" @click="ShowChildCommend(i)" onmouseover="this.src='../../static/images/msg_exist.png'" onmouseout="this.src='../../static/images/msg_none.png'">
+          <img class="thumb_up " src="../../static/images/msg_none.png" @click="ShowChildCommend(i)" onmouseover="this.src='../../static/images/msg_exist.png'" onmouseout="this.src='../../static/images/msg_none.png'">
           {{root_com.child_com.length}}
         </div>
         <div class="child_commend" v-if="show[i].status">
@@ -88,10 +89,11 @@
             </div>
             <div class="commend_down">
               <input type="text" class="reply_input"  v-show="show_input[i+1][j].status" v-model="show_input[i+1][j].value">
-              <input type="button" class="reply_button" v-show="show_input[i+1][j].status" value="评论" @click="Reply(11,22,i+1,j)"/>
+              <input type="button" class="reply_button" v-show="show_input[i+1][j].status" value="评论" @click="Reply(root_com.id, child.id, child.from_uid.id, 2,i+1, j)"/>
               <input type="button" class="reply_cancle"  v-show="show_input[i+1][j].status" value="取消 " @click="Cancle(i+1,j)"/>
               <button class="hide_reply" @click="ShowInput(i+1,j)">回复</button>
-              <img class="thumb_up msg" src="../../static/images/good_none.png">
+              <img class="thumb_up msg" v-if="!child.is_love" src="../../static/images/good_none.png" @click="createPoint(child.id, 2)" onmouseover="this.src='../../static/images/good_exist.png'"  onmouseout="this.src='../../static/images/good_none.png'">
+              <img class="thumb_up msg" v-if="child.is_love " src="../../static/images/good_exist.png">
               {{child.point_love_nums}}
             </div>
           </div>
@@ -154,26 +156,26 @@
     },
     mounted:function () {
       let id = this.videoId.toString()
-////      获取视频资源
-//      this.$axios.get('video/'+id+'/')
-//        .then((response)=>{
-//          this.videoInfo = response.data;
-//          this.playerOptions.sources[0].src = response.data.url
-//          this.playerOptions.poster = response.data.video_img
-//          console.log(this.videoInfo)
-//        })
-//        .catch(function (err) {
-//          console.log(err )
-//        })
-////      获取推荐的视频列表
-//      this.$axios.get('video_recommend/'+id + '/')
-//        .then((response)=>{
-//          this.videoRecommend = response.data
-//
-//        })
-//        .catch(function (err) {
-//          console.log(err)
-//        })
+//      获取视频资源
+      this.$axios.get('video/'+id+'/')
+        .then((response)=>{
+          this.videoInfo = response.data;
+          this.playerOptions.sources[0].src = response.data.url
+          this.playerOptions.poster = response.data.video_img
+          console.log(this.videoInfo)
+        })
+        .catch(function (err) {
+          console.log(err )
+        })
+//      获取推荐的视频列表
+      this.$axios.get('video_recommend/'+id + '/')
+        .then((response)=>{
+          this.videoRecommend = response.data
+
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
     this.getComment(id);
 
     },
@@ -204,6 +206,8 @@
 //         you can use it to do something...
         // player.[methods]
       },
+
+//      子评论的显示和隐藏
       ShowChildCommend(num){
         if( this.show[num].status === false) {
           this.show[num].status = true
@@ -212,6 +216,7 @@
           this.show[num].status = false
         }
       },
+//      获取推荐视频
       RecommendVideo(type){
 
         this.$store.dispatch('changeVideoId',type)
@@ -234,8 +239,9 @@
             console.log(err)
           })
       },
+//      创建跟评论
       CreateRootCommend(){
-          if(this.createRootCommend != ''){
+          if(this.createRootCommend !== ''){
            let video = this.videoId
            let  comment = this.createRootCommend
             this.$axios.post('video_com/',{
@@ -271,6 +277,7 @@
             })
         }
       },
+//      评论输入框的显示和隐藏
       ShowInput(i,j){
 //          if( this.show[i].status === false) {
 //            this.show[i].status = true
@@ -278,23 +285,50 @@
 //          else {
 //            this.show[i].status = false
 //          }
-          if(this.show_input[i][j].status==true){
+          if(this.show_input[i][j].status === true){
             this.show_input[i][j].status = false;
           }
          else{
             this.show_input[i][j].status = true;
           }
       },
-      Reply(aa,bb,i,j){
-          console.log(this.show_input[i][j].value)
+//      跟评论和自评论的回复
+      Reply(comment_id, reply_id, to_uid, reply_type ,i, j){
+
+          let comment = this.show_input[i][j].value;
+          console.log(comment_id, reply_id, to_uid, reply_type, comment);
+          this.$axios.post('/video_reply/',{
+            comment_id: comment_id,
+            reply_id: reply_id,
+            to_uid: to_uid,
+            reply_type: reply_type,
+            comment: comment
+          })
+            .then((res)=>{
+              this.show_input[i][j].value = ''
+              this.getComment(this.videoId)
+            })
       },
+//      取消回复
       Cancle(i,j){
 //          var pos = 's'+index.toString()
           this.show_input[i][j].status = false;
           this.show_input[i][j].value = ''
       },
+
       createPoint(id, type) {
-          this.$axios.get('point')
+          console.log(id, type)
+          this.$axios.post('point/',{
+            video_comment: id,
+            reply_type: type
+          })
+            .then((response)=>{
+              alert("点赞成功1")
+              this.getComment(this.videoId);
+            })
+            .catch(function (err) {
+              console.log(err)
+            })
       },
       getComment(id){
         var that=this;
@@ -316,6 +350,9 @@
                }
               }
             }
+          })
+          .catch(function (err) {
+            console.log(err)
           })
       }
     }
@@ -372,7 +409,5 @@
   .reply_input{height: 30px; width: 400px;vertical-align: middle;display: table-cell;border-radius: 10px;border: none;box-shadow: 0 0 3px grey;padding-left:7px;font-size: 19px;}
   .reply_button{border: none;background-color: #00BC9B;width: 40px;height: 28px;border-radius: 5px;color: white;font-size: medium;vertical-align: middle;display: table-cell;margin-left: 10px;padding-right: 3px;}
   .reply_cancle{border: none;background-color: #c1c1c1;width: 40px;height: 28px;border-radius: 5px;color: white;font-size: medium;vertical-align: middle;display: table-cell;margin-left: 5px;padding-left: 3px;}
-  .point:hover{}
-  .point:visited{}
 </style>
 
