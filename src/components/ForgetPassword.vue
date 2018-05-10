@@ -103,5 +103,5 @@
   input{  border-radius:10px; height:50px;border: 1px #cbcbcb solid;width: 250px;margin-top: 20px;}
   .vcode{width: 140px;margin-right: 10px;}
   .vcode_button{width: 100px;font-size: 20px;}
-  .submit_data{margin:30px 100px; width: 370px;background-color: #5394ec; font-size: 20px;}
+  .submit_data{margin:30px 100px; width: 370px;background-color: #5394ec; font-size: 20px;sssssssss}
 </style>
