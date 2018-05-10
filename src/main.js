@@ -8,7 +8,6 @@ import axios from 'axios';
 import store from './store/store'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-
 import Rigest from './components/Rigest.vue'
 import Login from './components/Login.vue'
 import ForgetPassword from './components/ForgetPassword.vue'
@@ -17,6 +16,11 @@ import MyInfo from './components/MyInfo.vue'
 import OnlineClass from './components/OnlineClass.vue'
 import TaskGround from './components/TaskGround.vue'
 import VideoPlayer from './components/VideoPlayer.vue'
+
+import 'element-ui/lib/theme-chalk/base.css';
+// collapse 展开折叠
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+Vue.component(CollapseTransition.name, CollapseTransition)
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
