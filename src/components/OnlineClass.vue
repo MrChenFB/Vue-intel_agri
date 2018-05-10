@@ -20,7 +20,7 @@
         <!--最新最热初始列表-->
         <div v-if="a==true">
           <div class="newest">
-            <div >
+            <div class="up_most">
               <span class="most">最 新</span>
             </div>
             <div  v-for="(news,index) in video_new.results" v-if="index <=3" :key="index" @click="getVideoSource(news.id)">
@@ -37,7 +37,7 @@
 
           </div>
           <div class="hotest">
-            <div>
+            <div class="up_most">
               <span class="most">最 热</span>
             </div>
             <div  v-for="(hot,index) in video_new.results" v-if="index <=3" :key="index" @click="getVideoSource(hot.id)">
@@ -68,10 +68,15 @@
             </div>
           </div>
         </div>
-        <div class="pagination" v-if="is_pagenation == true">
+        <!--分页-->
+        <div class="pagination" v-if="is_pagenation === true">
           <ul>
             <li @click="GetPre()"><<</li>
-            <li v-for=" n in parseInt(page_num)" @click="GetPination(n)" >{{n}}</li>
+            <li v-for=" n in parseInt(page_num)" @click="GetPination(n)" v-if="page<5&&n<5">{{n}}</li>
+            <li v-for=" n in parseInt(page_num)" @click="GetPination(n)" v-if="page>4&&n<3">{{n}}</li>
+            <li>...</li>
+            <li v-for=" n in parseInt(page_num)" @click="GetPination(n)" v-if="page>4&&(parseInt(page_num)-n)<3">{{n}}</li>
+            <li  v-if="page<6&&n<5">...</li>
             <li @click="GetNext()" >>></li>
           </ul>
         </div>
@@ -103,6 +108,7 @@
       })
     },
     methods:{
+      //分类筛选
       Slift(type) {
         this.$axios.get('video/?video_kind='+type)
           .then((response)=>{
@@ -126,6 +132,8 @@
             console.log(err)
           })
       },
+
+      //最新视频全部列表
       Newest(){
         this.$axios.get('video/?ordering=add_time&&page=1')
           .then((response)=>{
@@ -149,6 +157,7 @@
             console.log(err)
           })
       },
+      //最热视频全部列表
       Hotest(){
         this.$axios.get('video/?ordering=click_num')
           .then((response)=>{
@@ -172,6 +181,7 @@
             console.log(err)
           })
       },
+      //搜索视频列表
       Search(){
 //          alert('serafnn')
         if(this.search){
@@ -198,6 +208,7 @@
             })
         }
       },
+      //分页
       GetPination(get_page_num){
           this.$axios.get(this.type+'&&page='+get_page_num)
             .then((response)=>{
@@ -208,6 +219,7 @@
               console.log(err)
             })
       },
+      //前一页
       GetPre(){
           if(this.page===1){
               alert("已经是第一页啦！")
@@ -223,6 +235,7 @@
             console.log(err)
           })
       },
+      //后一页
       GetNext(){
           if(this.page === parseInt(this.page_num)){
               alert("已经是最后一页啦！")
@@ -238,6 +251,7 @@
             console.log(err)
           })
       },
+      //播放视频前将视频的信息存在vuex里面
       getVideoSource(type){
         this.$store.dispatch('changeVideoId',type)
         this.$router.push('/video_player')
@@ -278,9 +292,10 @@
     cursor: pointer;
   }
   .course{width: 100%;min-height: 900px; margin-top: 30px; }
-  .left{width: 75%;height: auto;float: left;position: relative;}
-  .right{width: 23%;float: right;height: 500px;border: 1px grey solid;margin-right: 30px;}
-  .newest,.hotest{width: 95%;margin: 10px auto;height: 400px;text-align: center}
+  .left{width: 74%;height: auto;float: left;position: relative;}
+  .right{width: 23%;float: right;height: 500px;border: 1px grey solid;margin-right:2%;}
+  .newest,.hotest{width: 95%;margin: 10px auto;height: 400px;text-align: center;}
+  .up_most{height: 50px;width: 100%;margin-bottom: 20px;text-align: center;}
   .most{font-size: 35px;}
   #button_div{width: 70%;height: 60px;margin-top: 30px;}
   .search{width: 300px;height: 40px;float: right;margin-right: 30px;margin-bottom: 20px;}
@@ -299,7 +314,7 @@
   }
   .list{width: 100%;height: auto; float: left;}
   .sort_button{border-radius: 7px;width: 60px;height: 40px;margin-left: 20px;border: none;cursor: pointer;font-size: 20px;margin-top: 10px;}
-  .courses{width: 20%;height: auto;float: left;margin-left: 50px;margin-bottom: 50px;background-color: #eeeeee;border-radius: 10px;padding-bottom: 3px;
+  .courses{width: 20%;height: auto;float: left;margin-left: 4%;margin-bottom: 50px;background-color: #eeeeee;border-radius: 10px;padding-bottom: 3px;
   }
   .cou_pic{border-radius: 10px;width: 100%;height: 150px;}
   .title{float:left;margin-left: 20px;font-size: 20px;font-weight: 800}
@@ -317,8 +332,8 @@
   }
   .heart{width: 20px;height: 20px;float: right;margin-right: 5px;margin-top: 0;}
   .read_num{float: right;color: grey;margin-right: 30px;}
-  .more{width: 95%;height: 50px;font-size: 20px;float:left;color: #b2b2b2;margin-top: 30px;cursor: pointer;text-align: right;}
-  .pagination{width: 100%;height: 70px;margin-bottom: 50px;}
+  .more{width: 95%;height: 50px;font-size: 20px;float:left;color: #b2b2b2;cursor: pointer;text-align: right;}
+  .pagination{width: 100%;height: 100px;margin-bottom: 70px;margin-top: 450px;}
   .pagination ul{float: right;height: inherit;line-height:inherit;text-align: center;padding-right: 50px;}
-  .pagination ul li{display: inline-block;padding: 15px;border: 1px solid #3fafff;border-radius: 10px;width: 20px;color:#1c65ff;margin-top: 30px;}
+  .pagination ul li{display: inline-block;padding: 15px;border: 1px solid #3fafff;border-radius: 10px;width: 20px;color:#1c65ff;margin-top: 30px;margin-right: 3px;}
 </style>

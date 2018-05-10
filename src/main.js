@@ -6,6 +6,9 @@ import VueRouter from 'vue-router'
 import App from './App'
 import axios from 'axios';
 import store from './store/store'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
 import Rigest from './components/Rigest.vue'
 import Login from './components/Login.vue'
 import ForgetPassword from './components/ForgetPassword.vue'
@@ -17,6 +20,7 @@ import VideoPlayer from './components/VideoPlayer.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
+Vue.use(ElementUI);
 // Vue.use(VueResource)
 axios.defaults.baseURL = "http://118.24.116.137:8001/";
 
