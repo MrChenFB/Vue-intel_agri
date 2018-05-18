@@ -29,7 +29,7 @@
                 <span class="title">{{news.video_name}}</span><br>
                 <span class="discription">{{news.desc}}</span><br/>
                 <span class="read_num">阅读量：{{news.click_num}}</span>
-                <img  class="heart" src="../../static/images/心2.png"/>
+                <img  class="heart" src="../../static/images/browsed.png"/>
 
               </div>
             </div>
@@ -46,7 +46,7 @@
                 <span class="title">{{hot.video_name}}</span><br>
                 <span class="discription">{{hot.desc}}</span><br/>
                 <span class="read_num">阅读量：{{hot.click_num}}</span>
-                <img  class="heart" src="../../static/images/心2.png"/>
+                <img  class="heart" src="../../static/images/browsed.png"/>
 
               </div>
             </div>
@@ -62,7 +62,7 @@
                 <span class="title">{{news.video_name}}</span><br>
                 <span class="discription">{{news.desc}}</span><br/>
                 <span class="read_num">阅读量：{{news.click_num}}</span>
-                <img  class="heart" src="../../static/images/心2.png"/>
+                <img  class="heart" src="../../static/images/browsed.png"/>
 
               </div>
             </div>
@@ -74,7 +74,7 @@
             <li @click="GetPre()"><<</li>
             <li v-for=" n in parseInt(page_num)" @click="GetPination(n)" v-if="page<5&&n<5">{{n}}</li>
             <li v-for=" n in parseInt(page_num)" @click="GetPination(n)" v-if="page>4&&n<3">{{n}}</li>
-            <li>...</li>
+            <li v-if=" parseInt(page_num)>5">...</li>
             <li v-for=" n in parseInt(page_num)" @click="GetPination(n)" v-if="page>4&&(parseInt(page_num)-n)<3">{{n}}</li>
             <li  v-if="page<6&&n<5">...</li>
             <li @click="GetNext()" >>></li>
@@ -222,7 +222,10 @@
       //前一页
       GetPre(){
           if(this.page===1){
-              alert("已经是第一页啦！")
+            this.$message({
+              message:'已经是第一页啦！',
+              type:'success'
+            })
             return ;
           }
           let page = this.page -1
@@ -238,7 +241,10 @@
       //后一页
       GetNext(){
           if(this.page === parseInt(this.page_num)){
-              alert("已经是最后一页啦！")
+            this.$message({
+              message:'已经是第最后一页啦！',
+              type:'success'
+            })
             return ;
           }
         let page = this.page +1

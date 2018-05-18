@@ -5,7 +5,7 @@
         <img  class='logo_img':src="'../static/images/logo2.jpg'">
         <ul style="float: right" class="left_nav" >
           <li :class="{bg:show==='login'}" v-if="!isLogin">
-            <router-link :to="'/login'" class="nav_a">登陆</router-link>
+            <router-link :to="'/login'" class="nav_a">登录</router-link>
           </li>
           <li  v-if="isLogin">
             <router-link :to="'/my_info'" class="dropdown">
