@@ -152,6 +152,9 @@
 <style>
   body,form,div,span,ul,ol,li,p,pre,dl,dt,dd,h1,h2,h3,h4,h5,h6,em,a,fieldset,legend,address,label,textarea,select,input,figure,table,th,td,b,i{margin:0;padding:0;}
   fieldset,img{border:0;}
+  section{
+    padding-bottom: 72px
+  }
   ul,li{list-style:none;}
   em,i{font-style:normal;}
   table{border-collapse:separate;border-spacing:0;}
@@ -169,7 +172,7 @@
   .nav{width: 100%;overflow: hidden;border-bottom: 1px grey solid;}
   header h1{width: 200px;height: 70px;line-height: 70px;font-size: 32px;cursor: pointer;transition: all .5s ease;margin: 0 auto}
   header h1:hover{font-size: 48px}
-  footer{height: 72px;background: #3d444c;width: 100%;min-width: 1150px;padding-top: 8px;color:#a9b8ca;}
+  footer{height: 72px;background: #3d444c;width: 100%;min-width: 1150px;padding-top: 8px;color:#a9b8ca;margin-top: -72px}
   .bg{background: #00BC9B;}
   .scroll{width: 60px;position: fixed;bottom: 90px;right: 0}
   .scroll-enter,.scroll-leave-active{

@@ -5,6 +5,8 @@ import VueRouter from 'vue-router'
 // import VueResource from 'vue-resource'
 import App from './App'
 import axios from 'axios';
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 import store from './store/store'
 import Rigest from './components/Rigest.vue'
 import Login from './components/Login.vue'
@@ -14,10 +16,11 @@ import MyInfo from './components/MyInfo.vue'
 import OnlineClass from './components/OnlineClass.vue'
 import TaskGround from './components/TaskGround.vue'
 import VideoPlayer from './components/VideoPlayer.vue'
+import UpLoadVideo from './components/UpLoadVideo.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
-// Vue.use(VueResource)
+Vue.use(ElementUI)
 axios.defaults.baseURL = "http://118.24.116.137:8001/";
 
 const router = new VueRouter({
@@ -29,7 +32,14 @@ const router = new VueRouter({
     {path:'/home',component:Home},
     {path:'/task_ground',component:TaskGround},
     {path:'/online_class',component:OnlineClass},
-    {path:'/my_info',component:MyInfo},
+    {path:'/my_info',
+      component:MyInfo,
+      // children: [
+      //   {path:'', component:info},
+      //   {path:'', component:uploadVideo}
+      // ]
+    },
+    {path:'/uploadVideo',component:UpLoadVideo},
     {path:'/video_player',
       component:VideoPlayer,
       // children:[
