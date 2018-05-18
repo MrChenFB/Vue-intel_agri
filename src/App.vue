@@ -5,7 +5,7 @@
         <img  class='logo_img':src="'../static/images/logo2.jpg'">
         <ul style="float: right" class="left_nav" >
           <li :class="{bg:show==='login'}" v-if="!isLogin">
-            <router-link :to="'/login'" class="nav_a">登陆</router-link>
+            <router-link :to="'/login'" class="nav_a">登录</router-link>
           </li>
           <li  v-if="isLogin">
             <router-link :to="'/my_info'" class="dropdown">
@@ -150,7 +150,11 @@
 </script>
 
 <style>
+
   body,form,div,span,ul,ol,li,p,pre,dl,dt,dd,h1,h2,h3,h4,h5,h6,em,a,fieldset,legend,address,label,textarea,select,input,figure,table,th,td,b,i{margin:0;padding:0;}
+  body{
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  }
   fieldset,img{border:0;}
   section{
     padding-bottom: 72px

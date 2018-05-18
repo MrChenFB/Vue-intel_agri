@@ -1,52 +1,77 @@
 <template>
   <div class="con">
-    <!--&lt;!&ndash;视频播放&ndash;&gt;-->
-    <!--<div class="video">-->
-      <!--&lt;!&ndash;视频播放的主体&ndash;&gt;-->
-      <!--<div class="left">-->
-        <!--<video-player  class="video-player-box"-->
-                       <!--ref="videoPlayer"-->
-                       <!--:options="playerOptions"-->
-                       <!--:playsinline="true"-->
-                       <!--customEventName="customstatechangedeventname"-->
 
-                       <!--@play="onPlayerPlay($event)"-->
-                       <!--@pause="onPlayerPause($event)"-->
-                       <!--@ended="onPlayerEnded($event)"-->
-                       <!--@waiting="onPlayerWaiting($event)"-->
-                       <!--@statechanged="playerStateChanged($event)"-->
-                       <!--@ready="playerReadied">-->
-        <!--</video-player>-->
-        <!--<div class="title" v-model="videoInfo">-->
-          <!--<span class="name" >{{videoInfo.video_name}} :</span>-->
-          <!--<span class="desc">{{videoInfo.desc}}</span><br/>-->
-          <!--<span class="click_num"><img src="../../static/images/video_click_num.jpg">  {{videoInfo.click_num}}</span>-->
-          <!--<span class=type></span>-->
-        <!--</div>-->
+    <!--视频播放-->
 
-      <!--</div>-->
-      <!--&lt;!&ndash;推荐视频列表&ndash;&gt;-->
-      <!--<div class="right">-->
-        <!--<div class="recommend" v-for="(videoRecommendItem, index) in videoRecommend" v-if="index <6" @click="RecommendVideo(videoRecommendItem.id)">-->
-          <!--<div class="rec_img"><img :src='"http://118.24.116.137:8001"+videoRecommendItem.video_img'></div>-->
-          <!--<div class="content">-->
-            <!--<div class="content_title">{{videoRecommendItem.video_name}}:{{videoRecommendItem.desc}}</div>-->
-            <!--<div class="con_click_num">-->
-              <!--<img class="rec_click_img" src="../../static/images/video_click_num.jpg">-->
-              <!--<span class="rec_click_num">{{videoRecommendItem.click_num}}</span>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
+    <div class="video">
 
-      <!--</div>-->
+      <el-row :gutter="20">
+        <el-col :span="16">   <div class="left">
+          <video-player  class="video-player-box"
+                         ref="videoPlayer"
+                         :options="playerOptions"
+                         :playsinline="true"
+                         customEventName="customstatechangedeventname"
+                         @play="onPlayerPlay($event)"
+                         @pause="onPlayerPause($event)"
+                         @ended="onPlayerEnded($event)"
+                         @waiting="onPlayerWaiting($event)"
+                         @playing="onPlayerPlaying($event)"
+                         @loadeddata="onPlayerLoadeddata($event)"
+                         @timeupdate="onPlayerTimeupdate($event)"
+                         @statechanged="playerStateChanged($event)"
+                         @ready="playerReadied"  >
+          </video-player>
+          <div class="title" v-model="videoInfo">
+            <span class="name" >{{videoInfo.video_name}} :</span>
+            <span class="desc">{{videoInfo.desc}}</span><br/>
+            <div style="width: 100%;height: 20px;"></div>
+            <span class="click_num" ><img class="title_icon" src="../../static/images/video_click_num.jpg">  {{videoInfo.click_num}}</span>
+            <div style="width: 400px;float: right;height: 40px;font-size: 26px;display: table-cell;vertical-align: middle;color: #c6cbba;background-color: antiquewhite">
+              <!--收藏-->
+              <img class="title_icon" src="../../static/images/collect.png" @click="Collect(videoInfo.id)" v-if="!is_collected">
+              <img class="title_icon" src="../../static/images/collected.png" v-if="is_collected">
+              <span  @click="Collect(videoInfo.id)" >Collect</span>
 
-    <!--</div>-->
+              <!--分享-->
+              <img  class="title_icon" src="../../static/images/share.png" style="margin-left: 30px;">
+              <span>Share</span>
+
+            </div>
+          </div>
+        </div>
+        </el-col>
+        <el-col :span="8"> <div class="right">
+          <div class="recommend" v-for="(videoRecommendItem, index) in videoRecommend" v-if="index <6" @click="RecommendVideo(videoRecommendItem.id)">
+            <div class="rec_img"><img :src='"http://118.24.116.137:8001"+videoRecommendItem.video_img'></div>
+            <div class="content">
+              <div class="content_title">{{videoRecommendItem.video_name}}:{{videoRecommendItem.desc}}</div>
+              <div class="con_click_num">
+                <img class="rec_click_img" src="../../static/images/video_click_num.jpg">
+                <span class="rec_click_num">{{videoRecommendItem.click_num}}</span>
+              </div>
+            </div>
+          </div>
+
+        </div></el-col>
+      </el-row>
+
+
+    </div>
 
     <!--评论-->
     <div class="commend">
       <!--创建自己的根评论-->
       <div >
-       <input type="text" class="create_root_commend" placeholder="请写下自己的评论..." v-model="createRootCommend" />
+        <el-input
+          type="textarea"
+          class="create_root_commend"
+          :row="2"
+          placeholder="请写下自己的评论..."
+          clearable
+          v-model="createRootCommend">
+        </el-input>
+       <!--<input type="text" class="create_root_commend" placeholder="请写下自己的评论..." v-model="createRootCommend" />-->
         <input type="button" class="create_root_button" value="评论" @click="CreateRootCommend()"/>
       </div>
 
@@ -63,14 +88,16 @@
         <div class="commend_content">{{root_com.comment}}
         </div>
         <div class="commend_down">
-          <input type="text" class="reply_input" v-if="show_input[0][i].status" v-model="show_input[0][i].value">
-          <input type="button" class="reply_button" v-if="show_input[0][i].status" value="评论" @click="Reply(11,22,0,0)"/>
+          <el-input type="text" class="reply_input" v-if="show_input[0][i].status" v-model="show_input[0][i].value" clearable>
+          </el-input>
+          <input type="button" class="reply_button" v-if="show_input[0][i].status" value="评论" @click="Reply(root_com.id,root_com.id,root_com.user.id,1,0,i)"/>
           <input type="button" class="reply_cancle"  v-if="show_input[0][i].status" value="取消 " @click="Cancle(0,i)"/>
-          <button class="hide_reply"  @click="ShowInput(0,i)">回复</button>
-          <img class="thumb_up point" src="../../static/images/good_none.png" @click="createPoint(i,1)" onmouseover="this.src='../../static/images/good_exist.png'" onmouseout="this.src='../../static/images/good_none.png'">
+          <button class="hide_reply"  @click="ShowInput(0,i)" >回复</button>
+          <img class="thumb_up " v-if="!root_com.is_love" src="../../static/images/good_none.png" @click="createPoint(root_com.id,1)" onmouseover="this.src='../../static/images/good_exist.png'" onmouseout="this.src='../../static/images/good_none.png'" >
+          <img class="thumb_up " v-if="root_com.is_love" src="../../static/images/good_exist.png" >
           {{root_com.point_love_nums}}
 
-          <img class="thumb_up msg" src="../../static/images/msg_none.png" @click="ShowChildCommend(i)" onmouseover="this.src='../../static/images/msg_exist.png'" onmouseout="this.src='../../static/images/msg_none.png'">
+          <img class="thumb_up " src="../../static/images/msg_none.png" @click="ShowChildCommend(i)" onmouseover="this.src='../../static/images/msg_exist.png'" onmouseout="this.src='../../static/images/msg_none.png'">
           {{root_com.child_com.length}}
         </div>
         <div class="child_commend" v-if="show[i].status">
@@ -79,7 +106,7 @@
               <img class="root_commend_icon" :src="child.from_uid.user_profile.image">
               <div class="root_commend_name">
                 <span >{{child.from_uid.user_profile.nick_name}}</span>
-                <span class="reply_charecter">&nbsp;&nbsp;回复&nbsp;&nbsp;</span>
+                <span class="reply_charecter">回复</span>
                 <span>{{child.to_uid.user_profile.nick_name}}</span>
               </div>
             </div>
@@ -87,11 +114,13 @@
               {{child.comment}}
             </div>
             <div class="commend_down">
-              <input type="text" class="reply_input"  v-show="show_input[i+1][j].status" v-model="show_input[i+1][j].value">
-              <input type="button" class="reply_button" v-show="show_input[i+1][j].status" value="评论" @click="Reply(11,22,i+1,j)"/>
+              <el-input type="text" class="reply_input"  v-show="show_input[i+1][j].status" v-model="show_input[i+1][j].value" clearable>
+              </el-input>
+              <input type="button" class="reply_button" v-show="show_input[i+1][j].status" value="评论" @click="Reply(root_com.id, child.id, child.from_uid.id, 2,i+1, j)"/>
               <input type="button" class="reply_cancle"  v-show="show_input[i+1][j].status" value="取消 " @click="Cancle(i+1,j)"/>
               <button class="hide_reply" @click="ShowInput(i+1,j)">回复</button>
-              <img class="thumb_up msg" src="../../static/images/good_none.png">
+              <img class="thumb_up msg" v-if="!child.is_love" src="../../static/images/good_none.png" @click="createPoint(child.id, 2)" onmouseover="this.src='../../static/images/good_exist.png'"  onmouseout="this.src='../../static/images/good_none.png'">
+              <img class="thumb_up msg" v-if="child.is_love " src="../../static/images/good_exist.png">
               {{child.point_love_nums}}
             </div>
           </div>
@@ -140,41 +169,50 @@
 
             ]
         ],
-//        input_value:{
-//            "s0":'',
-//          "s01":'',
-//          "s02":''
-//        },
         a:{},
         videoRecommend:{},
         createRootCommend:'',
         createChildCommend:'',
-        is_i:''
+        is_i:'',
+        is_collected:false
       }
     },
     mounted:function () {
       let id = this.videoId.toString()
-////      获取视频资源
-//      this.$axios.get('video/'+id+'/')
-//        .then((response)=>{
-//          this.videoInfo = response.data;
-//          this.playerOptions.sources[0].src = response.data.url
-//          this.playerOptions.poster = response.data.video_img
-//          console.log(this.videoInfo)
-//        })
-//        .catch(function (err) {
-//          console.log(err )
-//        })
-////      获取推荐的视频列表
-//      this.$axios.get('video_recommend/'+id + '/')
-//        .then((response)=>{
-//          this.videoRecommend = response.data
-//
-//        })
-//        .catch(function (err) {
-//          console.log(err)
-//        })
-    this.getComment(id);
+//      获取视频资源
+      this.$axios.get('video/'+id+'/')
+        .then((response)=>{
+          this.videoInfo = response.data;
+          this.playerOptions.sources[0].src = response.data.url
+          this.playerOptions.poster = response.data.video_img
+          console.log(this.videoInfo)
+        })
+        .catch(function (err) {
+          console.log(err )
+        })
+//      获取推荐的视频列表
+      this.$axios.get('video_recommend/'+id + '/')
+        .then((response)=>{
+          this.videoRecommend = response.data
+
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
+        //获取本视频是否已收藏
+      this.$axios.get('user_favs/'+id+'/')
+        .then((response)=>{
+         if(response.data.video === "null"){
+           this.is_collected = false;
+         }else{
+           this.is_collected = true
+         }
+         console.log(this.is_collected)
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
+        this.getComment(id);
 
     },
     computed: {
@@ -204,6 +242,8 @@
 //         you can use it to do something...
         // player.[methods]
       },
+
+//      子评论的显示和隐藏
       ShowChildCommend(num){
         if( this.show[num].status === false) {
           this.show[num].status = true
@@ -212,6 +252,7 @@
           this.show[num].status = false
         }
       },
+//      获取推荐视频
       RecommendVideo(type){
 
         this.$store.dispatch('changeVideoId',type)
@@ -234,8 +275,9 @@
             console.log(err)
           })
       },
+//      创建跟评论
       CreateRootCommend(){
-          if(this.createRootCommend != ''){
+          if(this.createRootCommend !== ''){
            let video = this.videoId
            let  comment = this.createRootCommend
             this.$axios.post('video_com/',{
@@ -244,64 +286,89 @@
               })
               .then((response)=>{
                 this.getComment(video);
-                alert("评论成功")
+                this.createRootCommend = null;
+                // alert("评论成功")
+                this.$message({
+                  message: '评论成功',
+                  type: 'success'
+                });
               })
               .catch(function (err) {
                 console.log(err)
-                alert("不知道啥子离家出走了，反正上传不了评论了╥﹏╥...")
+                this.$message({
+                  message:"不知道啥子离家出走了，反正上传不了评论了╥﹏╥...",
+                  type:'error',
+                  showClose:true
+
+                })
               })
+            this.createRootCommend = ''
           }
       },
-      CreateChildCommend() {
-        if(this.createChildCommend != ''){
-          let video = this.videoId
-          this.$axios.post('/video_reply/',{
-            'comment_id':this.root_com.id,
-            'reply_id': this.root_com.video,
-            'to_uid': this.root_com.user.id,
-            'comment':this.createChildCommend
-          })
-            .then((response)=>{
-              this.getComment(video);
-              alert("评论成功")
-            })
-            .catch(function (err) {
-              console.log(err)
-              alert("不知道啥子离家出走了，反正上传不了评论了╥﹏╥...")
-            })
-        }
-      },
+//      评论输入框的显示和隐藏
       ShowInput(i,j){
-//          if( this.show[i].status === false) {
-//            this.show[i].status = true
-//          }
-//          else {
-//            this.show[i].status = false
-//          }
-          if(this.show_input[i][j].status==true){
+          if(this.show_input[i][j].status === true){
             this.show_input[i][j].status = false;
           }
          else{
             this.show_input[i][j].status = true;
           }
       },
-      Reply(aa,bb,i,j){
-          console.log(this.show_input[i][j].value)
+//      跟评论和自评论的回复
+      Reply(comment_id, reply_id, to_uid, reply_type ,i, j){
+
+          let comment = this.show_input[i][j].value;
+          if(comment === null || comment === '')
+            return ;
+          this.$axios.post('/video_reply/',{
+            comment_id: comment_id,
+            reply_id: reply_id,
+            to_uid: to_uid,
+            reply_type: reply_type,
+            comment: comment
+          })
+            .then((res)=>{
+              this.show_input[i][j].value = ''
+              this.getComment(this.videoId)
+              this.show_input[i][j].status = false;
+              this.$message({
+                message:'回复成功',
+                type:'success'
+              })
+            })
       },
+//      取消回复
       Cancle(i,j){
 //          var pos = 's'+index.toString()
           this.show_input[i][j].status = false;
           this.show_input[i][j].value = ''
       },
+      //点赞
       createPoint(id, type) {
-          this.$axios.get('point')
+          console.log(id, type)
+          this.$axios.post('point/',{
+            video_comment: id,
+            reply_type: type
+          })
+            .then((response)=>{
+              this.$message({
+                message:'点赞成功',
+                type:'success'
+              })
+              // alert("点赞成功1")
+              this.getComment(this.videoId);
+            })
+            .catch(function (err) {
+              console.log(err)
+            })
       },
+      //获取评论信息
       getComment(id){
         var that=this;
 //      获取视频评论信息
         this.$axios.get('video_com/'+id +'/')
           .then((response)=>{
-            this.a = response.data;
+            this.a = response.data['results'];
 
             if(this.a.length >0){
               for(let i=0;i<this.a.length;i++){
@@ -317,6 +384,30 @@
               }
             }
           })
+          .catch(function (err) {
+            console.log(err)
+          })
+      },
+    //  收藏视频
+      Collect(id){
+        if(this.is_collected === true){
+          this.$message({
+            message:'已收藏',
+          })
+          return ;
+        }
+        this.$axios.post('/user_favs/',{
+          video:id
+        })
+          .then((response)=>{
+            this.$message({
+              message:'收藏成功',
+              type:'success'
+            })
+          })
+          .catch(function (err) {
+            console.log(err)
+          })
       }
     }
   }
@@ -324,13 +415,13 @@
 
 
 <style scoped>
-  .con{width: 100%;height: auto;margin-top: 5px;padding: 0;background-color: #f5f5f5;}
+  .con{width: 100%;height: auto;margin-top: 5px;padding: 0;background-color: #f5f5f5;padding-bottom: 50px;}
   .video{width:100%;height: 770px;padding-top: 20px;}
-  .left{width: 1190px;margin-left: 100px;height: 750px;float: left;box-shadow: 0 0 3px #d1d1d1;background-color: #ffffff;margin-right: 10px;}
-  .title{width: 1150px;height: 100px;padding-left: 50px;}
+  .left{width: 1170px;margin-left: 100px;height: 770px;float: left;box-shadow: 0 0 3px #d1d1d1;background-color: #ffffff;margin-right: 10px;}
+  .title{width: 1120px;height: 140px;padding-left: 50px;}
   .name{font-size: 30px;color: #00BC9B;}
   .desc{font-size: 25px;color: #636363;}
-  .click_num{font-size: 27px;color: #d7d7d7;}
+  .click_num{font-size: 20px;color: #cdcdcd; margin-right: 30px;vertical-align: middle;  display: inline-block;}
   .right{width: 300px;height: 720px;float: right;margin-right: 80px;box-shadow: 0 0 3px #d1d1d1;background-color: #ffffff;
   }
   .recommend{width:95%;margin-left: 5%;height: 110px;margin-bottom: 10px;}
@@ -346,10 +437,11 @@
   /*.root_commend:hover .child_commend{display: inline-block;}*/
   /*评论功能的css*/
   /*用户自己的根评论你*/
-  .create_root_commend{height: 50px;line-height: 50px;border-radius: 10px;width: 800px;margin-left: 110px;border: none;box-shadow: 0 0 3px #5b5b5b;padding-left: 20px;font-size: 21px;margin-bottom: 20px;margin-top: 10px;}
-  .create_root_button{height: 50px;width: 70px;background-color:#00BC9B; border: none;font-size: 20px;color: white;margin-left: 15px;border-radius: 5px;cursor:pointer;}
+  .create_root_commend{height: 50px;line-height: 50px;border-radius: 10px;width: 800px;margin-left: 110px;border: none;padding-left: 20px;font-size: 21px;margin-bottom: 60px;margin-top: 10px;}
+  .create_root_button{height: 50px;width: 70px;background-color:#00BC9B; border: none;font-size: 20px;color: white;margin-left: 25px;border-radius: 5px;cursor:pointer;margin-bottom: 35px;}
   /*展示评论*/
-  .commend{width: 1190px;margin-left: 100px;height: auto;box-shadow: 0 0 3px #d1d1d1;background-color: #ffffff;margin-top: 20px;padding-top: 20px; }
+  .commend{width: 1190px;margin-left: 100px;height: auto;box-shadow: 0 0 3px #d1d1d1;background-color: #ffffff;
+    margin-top: 20px;padding-top: 20px; padding-bottom: 20px;}
   .root_commend{width: 1000px;height: auto;display: inline-block;margin-left: 100px;border-bottom: 1px solid  #d1d1d1;margin-top: 20px;}
   .child_commend{
     width: 950px;
@@ -366,13 +458,35 @@
   .commend_content{width: 95%;margin-left: 20px;height: auto;margin-top: 10px;line-height: 30px;font-size: 19px;}
   .commend_down{width: auto;height:50px;line-height:50px; display: table-cell;float: right;color: grey; margin-right: 40px;margin-top: 10px;}
   .thumb_up{width: 23px;height: 23px;vertical-align: middle; margin-left: 15px;margin-right: 5px; cursor:pointer;}
-  .hide_reply{margin-left: 20px;background-color:#00BC9B; border: none;font-size: 15px;color: white;margin-left: 15px;border-radius: 5px;cursor:pointer; }
+  .hide_reply{margin-left: 20px;background-color:#409EFF; border: none;font-size: medium;color: white;border-radius: 5px;cursor:pointer; width: 40px;height: 28px;padding: 0;vertical-align: middle;display: table-cell;}
   .child_commend_reply{width: 95%;margin-left: 20px;height: auto;  border-bottom: solid 1px #d1d1d1;display: inline-block;margin-top: 20px;}
   .reply_charecter{color: #7a7a7a;}
-  .reply_input{height: 30px; width: 400px;vertical-align: middle;display: table-cell;border-radius: 10px;border: none;box-shadow: 0 0 3px grey;padding-left:7px;font-size: 19px;}
+  .reply_input{height: 30px; width: 400px;vertical-align: middle;display: inline-block;padding-left:7px;font-size: 19px;margin-bottom: 25px;border-radius: 20px;}
   .reply_button{border: none;background-color: #00BC9B;width: 40px;height: 28px;border-radius: 5px;color: white;font-size: medium;vertical-align: middle;display: table-cell;margin-left: 10px;padding-right: 3px;}
   .reply_cancle{border: none;background-color: #c1c1c1;width: 40px;height: 28px;border-radius: 5px;color: white;font-size: medium;vertical-align: middle;display: table-cell;margin-left: 5px;padding-left: 3px;}
-  .point:hover{}
-  .point:visited{}
+  .el-row {
+    margin-bottom: 20px;
+  }
+  .el-col {
+    border-radius: 4px;
+  }
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .bg-purple {
+    background: #d3dce6;
+  }
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+  .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+  }
+  .title_icon{width: 30px;height: 25px;}
 </style>
 

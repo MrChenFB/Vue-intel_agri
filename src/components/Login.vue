@@ -3,7 +3,7 @@
     <div id="main">
       <!--<router-link to="/" class="up_a">账号登陆</router-link>-->
       <!--<router-link to="/message">短信登陆</router-link>-->
-      <h2>用户登陆</h2>
+      <h2>账号登录</h2>
       <div class="name">
         <span>账号:</span>
         <input id="tel" type="text" placeholder="   请输入用户名/手机号" v-model="userName" required/>
