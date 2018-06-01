@@ -75,8 +75,7 @@
             <li v-for=" n in parseInt(page_num)" @click="GetPination(n)" v-if="page<5&&n<5">{{n}}</li>
             <li v-for=" n in parseInt(page_num)" @click="GetPination(n)" v-if="page>4&&n<3">{{n}}</li>
             <li v-if=" parseInt(page_num)>5">...</li>
-            <li v-for=" n in parseInt(page_num)" @click="GetPination(n)" v-if="page>4&&(parseInt(page_num)-n)<3">{{n}}</li>
-            <li  v-if="page<6&&n<5">...</li>
+            <li v-for=" ns in parseInt(page_num)" @click="GetPination(n)" v-if="page>4&&(parseInt(page_num)-ns)<3">{{ns}}</li>
             <li @click="GetNext()" >>></li>
           </ul>
         </div>

@@ -17,7 +17,7 @@
         <router-link to="/forgetPassword">忘记密码</router-link>
       </div>
      <div class="button">
-       <button type="button" v-on:click="login" class="submit_data">登 陆</button>
+       <button type="button" v-on:click="login" class="submit_data">登 录</button>
      </div>
 
 

@@ -24,7 +24,8 @@ const state={
   userInfo:{},
   status:false,
   userName:'',
-  videoId:1
+  videoId:1,
+  taskId:1
 }
 
 const mutations={
@@ -43,6 +44,9 @@ const mutations={
   },
   CHANGE_VIDEOID(state,id){
     state.videoId = id
+  },
+  CHANGE_TASKID(state,taskId){
+    state.taskId = taskId
   }
 
 }
@@ -62,6 +66,9 @@ const actions={
   },
   changeVideoId({commit},id){
     commit('CHANGE_VIDEOID',id)
+  },
+  changeTaskId({commit},id){
+    commit('CHANGE_TASKID',id)
   }
 
 }
@@ -81,6 +88,9 @@ const getters={
   },
   getVideoId(state){
     return state.videoId
+  },
+  getTaskId(state){
+    return state.taskId
   }
 
 }

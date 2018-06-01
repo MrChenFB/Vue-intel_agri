@@ -11,6 +11,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      '/mdm':{
+        target:' http:// 172.19.73.62:8080',
+        pathRewrite:{
+          '^/mdm':'/mdm'
+        }
+      }
     },
 
     // Various Dev Server settings
