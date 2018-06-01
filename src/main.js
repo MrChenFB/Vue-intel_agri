@@ -8,8 +8,7 @@ import axios from 'axios';
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './store/store'
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import 'element-ui/lib/theme-chalk/index.css'
 import Rigest from './components/Rigest.vue'
 import Login from './components/Login.vue'
 import ForgetPassword from './components/ForgetPassword.vue'
@@ -27,12 +26,11 @@ Vue.component(CollapseTransition.name, CollapseTransition)
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
-<<<<<<< HEAD
+
 Vue.use(ElementUI)
-=======
-Vue.use(ElementUI);
+
 // Vue.use(VueResource)
->>>>>>> e710c0d028ce2b342a2f14301c2c14676f55d7c6
+
 axios.defaults.baseURL = "http://118.24.116.137:8001/";
 
 const router = new VueRouter({

@@ -72,7 +72,6 @@
           this.$axios.get('/user/user_info/',)
             .then((response)=>{
               this.$store.dispatch('changeUserInfo',response.data)
-
             })
             .catch(function (err) {
               console.log(err)

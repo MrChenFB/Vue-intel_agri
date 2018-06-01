@@ -37,25 +37,30 @@
         <el-form :model="user_profile" :rules="rules" ref="user_profile" label-width="100px" class="demo-ruleForm">
           <el-form-item label="头像">
             <el-upload
-              class="avatar-uploader"
-              action=""
-              :show-file-list="false"
-              :auto-upload="false"
-              :on-change="changeFile2">
-              <img id="infoImg" v-if="user_profile.image" :src="user_profile.image" class="avatar">
-              <!--<el-button v-else slot="trigger" size="small" type="primary">选取文件</el-button>-->
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              class="upload-demo"
+              id="Container"
+              ref="upload"
+              action="//up-z2.qiniup.com"
+              :data="form"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :on-change="handleTokenChange"
+              :on-success="handleSuccess"
+              :file-list="fileList"
+              :auto-upload="false">
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <el-button id="selectImage" style="margin-left: 10px;" size="small" type="success" @click="qiniuUpload">
+                上传到服务器
+              </el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
             </el-upload>
-            <!--<el-button>确认提交</el-button>-->
           </el-form-item>
           <el-form-item label="出生日期">
-            <div class="block">
-              <el-date-picker
-                v-model="user_profile.birth"
-                type="date"
-                placeholder="选择日期">
-              </el-date-picker>
-            </div>
+            <el-date-picker
+              type="date"
+              placeholder="选择日期"
+              v-model="user_profile.birth">
+            </el-date-picker>
           </el-form-item>
           <el-form-item label="性别">
             <el-select v-model="user_profile.sex" placeholder="请选择">
@@ -92,27 +97,23 @@
           </el-form-item>
           <el-form-item label="视频描述" prop="des" required>
             <el-input type="textarea" v-model="uploadVideo.video_des"></el-input>
-
           </el-form-item>
           <el-form-item label="视频封面" required>
             <el-upload
               class="avatar-uploader"
-              action=""
+              action="//up-z2.qiniup.com"
+              :data="form"
+              ref="uploadPage"
               :show-file-list="false"
               :auto-upload="false"
-              :on-change="changeFile">
-              <img id="giftImg" v-if="uploadVideo.video_img" :src="uploadVideo.video_img" class="avatar">
+              :on-change="changeFile"
+              :on-success="handleAvatarSuccess">
+              <img id="giftImg" v-if="imageView" :src="imageView" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-            <!--<el-upload-->
-              <!--class="avatar-uploader"-->
-              <!--:show-file-list="false"-->
-              <!--:on-success="handleAvatarSuccess"-->
-              <!--:before-upload="beforeAvatarUpload">-->
-              <!--<img v-if="uploadVideo.video_url" :src="uploadVideo.video_url" class="avatar">-->
-              <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-            <!--</el-upload>-->
-            <!--<el-input type="file" v-model="uploadVideo.video_url"></el-input>-->
+            <el-button  style="margin-left: 10px;" size="small" type="success" @click="qiniuUploadPage">
+              上传到服务器
+            </el-button>
           </el-form-item>
           <el-form-item label="视频类别" prop="kind" required>
             <el-select v-model="uploadVideo.video_kind" placeholder="请选择">
@@ -121,21 +122,31 @@
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
-                >
+              >
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="视频地址" prop="url" required>
-            <el-upload
-              class="upload-demo"
-              drag
-              action=""
-              multiple
-              v-model="uploadVideo.video_url">
-              <i class="el-icon-upload"></i>
-              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-              <!--<div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>-->
-            </el-upload>
+            <div>
+              <el-upload
+                class="upload-demo"
+                id="buttonContainer"
+                ref="uploadTV"
+                action="//up-z2.qiniup.com"
+                :data="form"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :on-change="handleTokenChange"
+                :on-success="handleSuccessVideo"
+                :file-list="fileList"
+                :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <el-button id="selectVideo" style="margin-left: 10px;" size="small" type="success" @click="qiniuUploadVideo">
+                  上传到服务器
+                </el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+              </el-upload>
+            </div>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="UploadVideo">立即上传</el-button>
@@ -151,14 +162,13 @@
       <div class="myCollection" v-if="showMyCollection">
         <img v-if="favs_list.length===0" src="../assets/timg.jpg"/>
         <el-row>
-          <el-col :span="8" v-for="(vo, index) in favs_list.results" :key="index" :offset="index > 0 ? 4 : 0">
-            <el-card to="/video_player" :body-style="{ padding: '0px' }">
-              <img src="../assets/hamburge.png" class="image">
+          <el-col :span="6" v-for="(v, index) in favs_list" :key="index" :offset="index > 0 ? 2 : 0">
+            <el-card to="/video_player" :body-style="{ padding: '0px',}">
+              <img :src="v.video.video_img" class="image classimg">
               <div style="padding: 14px;">
-                <span> {{}} </span>
+                <span> {{v.video.video_name}} </span>
                 <div class="bottom clearfix">
-                  <time class="time">{{ currentDate }}</time>
-                  <el-button type="text" class="button" @click="delCollection">删除收藏</el-button>
+                  <el-button type="text" class="button" @click="delCollection(v.video.id)">删除收藏</el-button>
                 </div>
               </div>
             </el-card>
@@ -173,16 +183,20 @@
 <script>
   import {mapGetters} from 'vuex'
   import avatarImage from './ImageCropper/index'
-  import ElButton from "../../node_modules/element-ui/packages/button/src/button";
-  import ElInput from "../../node_modules/element-ui/packages/input/src/input";
-  import ElFormItem from "../../node_modules/element-ui/packages/form/src/form-item";
+
   export default {
-    components: {
-      ElFormItem,
-      ElInput,
-      ElButton},
+    components: {},
+    computed: {
+      ...mapGetters({
+        userInfo: 'getUserInfo'
+      })
+    },
     data() {
       return {
+        form: {
+          token: ''
+        },
+        qiniu_url: 'http://p71yd5lgg.bkt.clouddn.com/',
         image_src: '../assets/timg.jpg',
         currentDate: new Date(),
         showUserInfo: true,
@@ -194,8 +208,9 @@
           image: '',
           sex: '',
           address: '',
-          birth: ''
+          birth: '',
         },
+        imageView: '',
         uploadVideo: {
           video_name: '',
           video_des: '',
@@ -203,58 +218,119 @@
           video_kind: '',
           video_url: ''
         },
-        video_rules :{
-
-        },
+        video_rules: {},
         favs_list: {},
         rules: {
           name: [
-            { message: '请输入活动名称', trigger: 'blur'},
+            {message: '请输入活动名称', trigger: 'blur'},
           ],
           password: [
             {min: 6, message: '请输入长度正确的密码', trigger: 'change'}
           ],
         },
-        options: [{
-          value: 'plant',
-          label: '种植业'
-        }, {
-          value: 'aquaculture',
-          label: '水产养殖业'
-        }, {
-          value: 'agri_industry',
-          label: '农资业'
-        }, {
-          value: 'agri_and_sideline_industries',
-          label: '农副加工业'
-        }, {
-          value: 'animal',
-          label: '畜牧业'
-        }],
-        Sexoptions: [{
-            value: '男',
-            label: '男',
-        },
-          {
-            value: '女',
-            label: '女',
-          }]
+        options: [
+          {value: 'plant', label: '种植业'},
+          {value: 'aquaculture', label: '水产养殖业'},
+          {value: 'agri_industry', label: '农资业'},
+          {value: 'agri_and_sideline_industries', label: '农副加工业'},
+          {value: 'animal', label: '畜牧业'}
+        ],
+        Sexoptions: [
+          {value: 'male', label: '男'},
+          {value: 'female', label: '女'}
+        ]
       };
     },
 //    components: { avatarImage },
     methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
+      qiniuUpload() {
+        this.$refs.upload.submit();
+        return;
+        var upLoader = Qiniu.uploader({
+          runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+          browse_button: 'selectVideo',         // 上传选择的点选按钮，必需
+
+          //   uptoken_url: 'http://118.24.116.137:8001/upload_video/',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+          uptoken: '',
+          get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+          // downtoken_url: '/downtoken',
+          // Ajax请求downToken的Url，私有空间时使用，JS-SDK将向该地址POST文件的key和domain，服务端返回的JSON必须包含url字段，url值为该文件的下载地址
+          // unique_names: true,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
+          save_key: true,                  // 默认false。若在服务端生成uptoken的上传策略中指定了save_key，则开启，SDK在前端将不对key进行任何处理
+          domain: 'p86yw163m.bkt.clouddn.com',     // bucket域名，下载资源时用到，必需
+          container: 'buttonContainer',             // 上传区域DOM ID，默认是browser_button的父元素
+          max_file_size: '2000mb',             // 最大文件体积限制
+          flash_swf_url: '../utils/plupload/Moxie.swf',  //引入flash，相对路径
+          max_retries: 3,                     // 上传失败最大重试次数
+          dragdrop: true,                     // 开启可拖曳上传
+          drop_element: 'videoContainer',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+          chunk_size: '4mb',                  // 分块上传时，每块的体积
+          auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+          //x_vars : {
+          //    查看自定义变量
+          //    'time' : function(up,file) {
+          //        var time = (new Date()).getTime();
+          // do something with 'time'
+          //        return time;
+          //    },
+          //    'size' : function(up,file) {
+          //        var size = file.size;
+          // do something with 'size'
+          //        return size;
+          //    }
+          //}
+          init: {
+            'FilesAdded': function (up, files) {
+              plupload.each(files, function (file) {
+                // 文件添加进队列后，处理相关的事情
+              });
+            },
+            'BeforeUpload': function (up, file) {
+              // 每个文件上传前，处理相关的事情
+            },
+            'UploadProgress': function (up, file) {
+              // 每个文件上传时，处理相关的事情
+            },
+            'FileUploaded': function (up, file, info) {
+              // 每个文件上传成功后，处理相关的事情
+              // 其中info是文件上传成功后，服务端返回的json，形式如：
+              // {
+              //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+              //    "key": "gogopher.jpg"
+              //  }
+              // 查看简单反馈
+              var domain = up.getOption('domain')
+              var res = parseJSON(info)
+              var sourceLink = domain + "/" + res.key
+              this.uploadVideo.video_url = sourceLink
+              alert(sourceLink)
+              //获取上传成功后的文件的Url
+            },
+            'Error': function (up, err, errTip) {
+              //上传出错时，处理相关的事情
+            },
+            'UploadComplete': function () {
+              //队列文件处理完毕后，处理相关的事情
+            },
+            'Key': function (up, file) {
+              // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+              // 该配置必须要在unique_names: false，save_key: false时才生效
+              var key = "";
+              // do something with key here
+              return key
+            }
           }
         });
       },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
+      qiniuUploadPage() {
+        this.$refs.uploadPage.submit();
+      },
+      qiniuUploadVideo() {
+        this.$refs.uploadTV.submit();
+      },
+      handleSuccess(res, file, fileList) {
+        this.user_profile.image = this.qiniu_url + res.key
+        console.log(this.qiniu_url + res.key)
       },
       ToInfo() {
         this.showUploadVideo = false
@@ -289,10 +365,19 @@
         this.showUploadDoc = true
 
       },
-      handleAvatarSuccess(res, file) {
-        this.user_profile.imageUrl = URL.createObjectURL(file.raw);
+
+      handleTokenChange(file, filelist){
+        var This = this
+        this.$axios.get('http://118.24.116.137:8001/upload_video/')
+          .then(res => {
+            console.log(res)
+            This.form.token = res.data.token
+          }).catch(err => {
+          console.log(err)
+        })
       },
       beforeAvatarUpload(file) {
+        console.log(file)
         const isJPG = file.type === 'image/jpeg';
         const isPNG = file.type === 'image/png';
 
@@ -308,25 +393,35 @@
       },
       uploadMyInfo() {
         var id = this.$store.state.userInfo.id
-        alert(id)
-        this.$axios.put('/user/'+id, {
-          'user_profile': this.user_profile
+
+        var birth = new Date(this.user_profile.birth)
+        var Y = birth.getFullYear() + '-';
+        var M = (birth.getMonth() + 1 < 10 ? '0' + (birth.getMonth() + 1) : birth.getMonth() + 1) + '-';
+        var D = birth.getDate();
+        this.user_profile.birth = Y + M + D
+        this.$axios.put('/re_user/' + id + '/', {
+          'image': this.user_profile.image,
+          'birth': this.user_profile.birth,
+          'sex': this.user_profile.sex,
+          'address': this.user_profile.address,
+          'nick_name': this.user_profile.nick_name
         })
           .then((res) => {
-
-          })
+            console.log(res)
+            this.$store.state.userInfo.user_profile.image = res.data.image
+        })
           .catch((res) => {
-
+            console.log(res)
           })
-
       },
       UploadVideo() {
-        this.$axios.post('/video/',{
-            'video_name': this.uploadVideo.video_name,
-            'desc': this.uploadVideo.video_des,
-            'video_img': this.uploadVideo.video_img,
-            'video_kind': this.uploadVideo.video_kind,
-            'url': this.uploadVideo.video_url
+        console.log(this.uploadVideo)
+        this.$axios.post('/video/', {
+          'video_name': this.uploadVideo.video_name,
+          'desc': this.uploadVideo.video_des,
+          'video_img': this.uploadVideo.video_img,
+          'video_kind': this.uploadVideo.video_kind,
+          'video_url': this.uploadVideo.video_url
         })
           .then((res) => {
             console.log(res)
@@ -335,8 +430,8 @@
             console.log(err)
           })
       },
-      uploadDoc() {
-
+      handleSuccessVideo(res, file){
+          this.uploadVideo.video_url = this.qiniu_url + res.key
       },
       getMyCollection() {
         this.$axios.get('/user_favs/')
@@ -344,47 +439,71 @@
             console.log(res)
             this.favs_list = res.data
             console.log(this.favs_list.length);
-
-
+            console.log(this.favs_list)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      },
+      delCollection(v_id) {
+        this.$axios.delete('/user_favs/' + v_id)
+          .then((res) => {
+            this.$axios.get('/user_favs/')
+              .then((res) => {
+              })
+              .catch((err) => {
+              })
+            console.log(res)
           })
           .catch((err) => {
             console.log(err)
           })
       },
       changeFile(file, fileList) {
-        var This = this;
-        //this.imageUrl = URL.createObjectURL(file.raw);
+        var This = this
+        this.$axios.get('http://118.24.116.137:8001/upload_video/')
+          .then(res => {
+            console.log(res)
+            This.form.token = res.data.token
+            console.log(This.uploadVideo.img)
+          }).catch(err => {
+          console.log(err)
+        })
         var reader = new FileReader();
         reader.readAsDataURL(file.raw);
-        reader.onload = function(e){
+        reader.onload = function (e) {
           this.result // 这个就是base64编码了
-          This.uploadVideo.video_img = this.result;
+          This.imageView = this.result;
         }
+      },
+      handleAvatarSuccess(res, file) {
+          this.uploadVideo.video_img = this.qiniu_url + res.key
       },
       changeFile2(file, fileList) {
-        var This = this;
-        //this.imageUrl = URL.createObjectURL(file.raw);
-        var reader = new FileReader();
-        reader.readAsDataURL(file.raw);
-        reader.onload = function(e){
+        var This = this
+        var reader = new FileReader()
+        reader.readAsDataURL(file.raw)
+        reader.onload = function (e) {
           this.result // 这个就是base64编码了
-          This.user_profile.image = this.result;
+          This.imageView = this.result
         }
       },
-
+      handleChange(file, fileList) {
+        this.fileList3 = fileList.slice(-1);
+      }
     }
   }
 </script>
 
 <style>
-  .userInfo {
+  /*.userInfo {*/
 
-  .title_info {
-    font-size: 100px;
-    text-align: center;
-  }
+  /*.title_info {*/
+  /*font-size: 100px;*/
+  /*text-align: center;*/
+  /*}*/
 
-  }
+  /*}*/
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
@@ -440,5 +559,12 @@
 
   .clearfix:after {
     clear: both
+  }
+
+  .classimg {
+    width: 130px;
+    height: 100px;
+    text-align: center;
+    margin: 15px;
   }
 </style>

@@ -45,6 +45,8 @@ export default {
             this.$store.state.token = response.data.token
             sessionStorage.setItem('token',response.data.token)
             console.log(sessionStorage.getItem('token'))
+            console.log(response)
+            debugger
             this.$store.dispatch('changeUserName',this.userName)
             this.$router.push('/online_class')
             window.location.reload();
