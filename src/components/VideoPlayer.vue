@@ -27,7 +27,7 @@
             <span class="desc">{{videoInfo.desc}}</span><br/>
             <div style="width: 100%;height: 20px;"></div>
             <span class="click_num" ><img class="title_icon" src="../../static/images/video_click_num.jpg">  {{videoInfo.click_num}}</span>
-            <div style="width: 400px;float: right;height: 40px;font-size: 26px;display: table-cell;vertical-align: middle;color: #c6cbba;background-color: antiquewhite">
+            <div style="width: 300px;float: right;height: 40px;font-size: 26px;display: table-cell;vertical-align: middle;color: #c6cbba;">
               <!--收藏-->
               <img class="title_icon" src="../../static/images/collect.png" @click="Collect(videoInfo.id)" v-if="!is_collected">
               <img class="title_icon" src="../../static/images/collected.png" v-if="is_collected">
@@ -174,11 +174,13 @@
         createRootCommend:'',
         createChildCommend:'',
         is_i:'',
-        is_collected:false
+        is_collected:true
       }
     },
-    mounted:function () {
+    created:function () {
+      alert(id)
       let id = this.videoId.toString()
+
 //      获取视频资源
       this.$axios.get('video/'+id+'/')
         .then((response)=>{
@@ -400,6 +402,7 @@
           video:id
         })
           .then((response)=>{
+            this.is_collected = true;
             this.$message({
               message:'收藏成功',
               type:'success'

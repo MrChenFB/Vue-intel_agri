@@ -8,14 +8,9 @@
             <router-link :to="'/login'" class="nav_a">登录</router-link>
           </li>
           <li  v-if="isLogin">
-            <router-link :to="'/my_info'" class="dropdown">
+            <router-link :to="'/my_info'" >
               <img class="user_img" v-if="this.userInfo" :src="this.userInfo.user_profile.image">
             </router-link>
-            <div class="dropdown-content">
-              <router-link to="/login">链接2</router-link>
-              <a href="#">链接 2</a>
-              <a href="#">链接 3</a>
-            </div>
           </li>
         </ul>
         <ul class="left_nav">
@@ -32,9 +27,15 @@
       </div>
     </header>
     <section>
-      <transition name="display">
-        <router-view></router-view>
-      </transition>
+        <keep-alive>
+          <router-view v-if="$route.meta.keepAlive">
+            <!-- 这里是会被缓存的视图组件，比如 Home！ -->
+          </router-view>
+        </keep-alive>
+
+        <router-view v-if="!$route.meta.keepAlive">
+          <!-- 这里是不被缓存的视图组件，比如 Edit！ -->
+        </router-view>
     </section>
     <footer>
       <p class="payment">
@@ -153,7 +154,8 @@
 
   body,form,div,span,ul,ol,li,p,pre,dl,dt,dd,h1,h2,h3,h4,h5,h6,em,a,fieldset,legend,address,label,textarea,select,input,figure,table,th,td,b,i{margin:0;padding:0;}
   body{
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    /*font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;*/
+    font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif
   }
   fieldset,img{border:0;}
   ul,li{list-style:none;}
@@ -166,11 +168,11 @@
   input{text-shadow: none}
   #app{width:100%;position: relative;}
   header{height: 70px;min-width: 1150px}
-  .left_nav{float:right;}
+  .left_nav{float:right; }
   .left_nav li{display: inline-block;text-align: center;height: 70px;line-height: 70px;font-size: 20px;transition: all .3s ease-in-out;cursor: pointer;margin-right: 20px;}
   .left_nav li:hover{background: #00BC9B}
   .nav_a{display: inline-block;height: 80px;padding: 0 15px;}
-  .nav{width: 100%;overflow: hidden;border-bottom: 1px grey solid;}
+  .nav{width: 100%;overflow: hidden;border-bottom: 1px #f1f1f1 solid;position: fixed;z-index: 999;background-color: white}
   header h1{width: 200px;height: 70px;line-height: 70px;font-size: 32px;cursor: pointer;transition: all .5s ease;margin: 0 auto}
   header h1:hover{font-size: 48px}
   footer{height: 72px;background: #3d444c;width: 100%;min-width: 1150px;padding-top: 8px;color:#a9b8ca;}
@@ -195,32 +197,6 @@
     -o-transition: all .5s ease;  /* Opera */
   }
   .logo_img{width: 60px;height: 60px;float: left;margin-left: 60px;margin-top: 5px;}
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 105px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  }
-
-  .dropdown-content a {
-    width: 90%;
-    height: 50px;
-    color: black;
-    padding: 5px 5px;
-    text-decoration: none;
-    display: block;
-  }
-
-  .dropdown-content a:hover {background-color: #f1f1f1}
-
-  .dropdown:hover .dropdown-content{
-    display: block;
-  }
 
   .user_img{height: 70px;width: 65px;border-radius: 32px;}
 </style>
